@@ -20,10 +20,11 @@ func main() {
 		panic(err)
 	}
 
-	initRoutes()
+	serveMux := CustomMux{http.NewServeMux()}
+	initRoutes(serveMux)
 
 	fmt.Printf("Starting http server on %s\n", argBindAddr)
-	if err = http.ListenAndServe(argBindAddr, nil); err != nil {
+	if err = http.ListenAndServe(argBindAddr, serveMux); err != nil {
 		panic(err)
 	}
 }
