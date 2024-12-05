@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type CustomMux struct{ *http.ServeMux }
@@ -10,18 +11,28 @@ type RouteFunc func(http.ResponseWriter, *http.Request)
 type UserRouteFunc func(http.ResponseWriter, *http.Request, User)
 
 // Basic HTTP route with logging
-func (mux *CustomMux) newRoute(pattern string, handler RouteFunc) {
+func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 	mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		mux.logRequest(r)
-		handler(w, r)
+		cw := &CustomResponseWriter{w, 200}
+
+		start := time.Now()
+		handler(cw, r)
+		end := time.Since(start) / time.Millisecond
+
+		fmt.Printf(
+			"[%s] %dms %d %s %s\n",
+			r.RemoteAddr,
+			end,
+			cw.statusCode,
+			r.Method,
+			r.RequestURI,
+		)
 	})
 }
 
 // HTTP route with User and logging.
-func (mux *CustomMux) newUserRoute(pattern string, handler UserRouteFunc) {
-	mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		mux.logRequest(r)
-
+func (mux *CustomMux) NewUserRoute(pattern string, handler UserRouteFunc) {
+	mux.NewRoute(pattern, func(w http.ResponseWriter, r *http.Request) {
 		user, err := mux.loadUser(w, r)
 		if err != nil {
 			return
@@ -29,10 +40,6 @@ func (mux *CustomMux) newUserRoute(pattern string, handler UserRouteFunc) {
 
 		handler(w, r, user)
 	})
-}
-
-func (mux *CustomMux) logRequest(r *http.Request) {
-	fmt.Printf("[%s] %s %s\n", r.RemoteAddr, r.Method, r.RequestURI)
 }
 
 // Load the user from database.
@@ -47,4 +54,15 @@ func (mux *CustomMux) loadUser(w http.ResponseWriter, r *http.Request) (user Use
 	}
 
 	return
+}
+
+// Custom Writer so we can pull the statusCode for logging
+type CustomResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func (rw *CustomResponseWriter) WriteHeader(code int) {
+	rw.statusCode = code
+	rw.ResponseWriter.WriteHeader(code)
 }

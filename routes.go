@@ -6,15 +6,13 @@ import (
 )
 
 func initRoutes(serveMux CustomMux) {
-	serveMux.newRoute("/", routeRoot)
-	serveMux.newUserRoute("/nextVote", routeNextVote)
-	serveMux.newUserRoute("/submitVote", routeSubmitVote)
+	serveMux.NewRoute("/", routeRoot)
+	serveMux.NewUserRoute("/nextVote", routeNextVote)
+	serveMux.NewUserRoute("/submitVote", routeSubmitVote)
 }
 
 // Middleware TODO
-//		Log routes
 //		Rate limiting
-//		User loading
 
 // Base route, return HTML template
 func routeRoot(w http.ResponseWriter, req *http.Request) {
