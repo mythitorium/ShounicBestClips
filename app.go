@@ -1,0 +1,29 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+var database *Database
+
+// TODO vArgs
+var argDBFile = "votes.db"
+var argBindAddr = ":8081"
+
+func main() {
+	var err error
+
+	fmt.Printf("Loading database %s\n", argDBFile)
+	database, err = LoadDatabase(argDBFile)
+	if err != nil {
+		panic(err)
+	}
+
+	initRoutes()
+
+	fmt.Printf("Starting http server on %s\n", argBindAddr)
+	if err = http.ListenAndServe(argBindAddr, nil); err != nil {
+		panic(err)
+	}
+}
