@@ -162,20 +162,11 @@ func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	return
 }
 
-func (db *Database) cleanExpiredVotes() (count int64, err error) {
-	res, err := db.Exec(
-		// TODO fixme
-		"DELETE FROM active_votes WHERE start_time + ? > unixepoch()",
-		VoteExpireTime,
-	)
-	if err != nil {
-		return
-	}
-	return res.RowsAffected()
-}
-
 func (db *Database) SubmitUserVote(user User, voteId VoteOptions, choice string) (err error) {
 	// TODO check if vote is expired
+
+	// TODO check if user is voting too fast
+	// 			minTime := min(a.length, b.length) / 2
 
 	return
 }
