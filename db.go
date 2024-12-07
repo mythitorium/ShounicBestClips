@@ -62,27 +62,43 @@ func (db *Database) setup() (err error) {
 }
 
 func (db *Database) GetUser(remoteAddr string) (user User, err error) {
-	remoteAddr, _, err = net.SplitHostPort(remoteAddr)
+	user.ip, _, err = net.SplitHostPort(remoteAddr)
 	if err != nil {
 		return
 	}
 
+	// Get user from database
 	row, err := db.Query(
-		"INSERT OR IGNORE INTO users(ip) VALUES (?); SELECT * FROM users WHERE ip=?;",
-		remoteAddr,
-		remoteAddr,
+		"SELECT id FROM users WHERE ip=?",
+		user.ip,
 	)
 	if err != nil {
 		return
 	}
 	defer row.Close()
 
-	if !row.Next() {
-		err = fmt.Errorf("GetUser gave 0 results for %s", remoteAddr)
+	if row.Next() {
+		err = row.Scan(&user.id)
 		return
 	}
 
-	err = row.Scan(&user.id, &user.ip)
+	// Add user if they do not already exist.
+	row2, err := db.Query(
+		"INSERT INTO users(ip) VALUES (?) RETURNING id",
+		user.ip,
+	)
+	if err != nil {
+		return
+	}
+	defer row2.Close()
+
+	if !row2.Next() {
+		// Database has dementia
+		err = fmt.Errorf("GetUser gave 0 results after inserting %s", user.ip)
+		return
+	}
+
+	err = row2.Scan(&user.id)
 	return
 }
 
