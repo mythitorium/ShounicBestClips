@@ -1,7 +1,8 @@
 package main
 
 import (
-	"math"
+	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -20,9 +21,32 @@ func routeRoot(w http.ResponseWriter, req *http.Request) {
 }
 
 func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
-	// TODO return 2xx when user has completed their queue
+	options, err := database.GetNextVoteForUser(user)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to fetch from database."))
+		// TODO log to Sentry
+		fmt.Printf("Failed to get new votes for user %v \"%s\"\n", user, err)
+		return
+	}
 
-	w.Write([]byte("TODO return clips"))
+	// User has completed their queue
+	if options == nil {
+		w.WriteHeader(204) // NO_CONTENT
+		w.Write([]byte("No more items to vote on!"))
+		return
+	}
+
+	bytes, err := json.Marshal(options)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to write JSON data?"))
+		// TODO log to Sentry
+		fmt.Printf("Failed to write json data %v\n", options)
+		return
+	}
+
+	w.Write(bytes)
 }
 
 func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
@@ -38,12 +62,6 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 	w.Write([]byte("TODO submit vote"))
 }
 
-// TODO /voteClips
-
 // TODO /myVotes
 
 // TODO /totalVotes
-
-func requestToUser(req *http.Request) (user User) {
-	return User{math.MaxUint, req.RemoteAddr}
-}
