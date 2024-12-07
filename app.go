@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer database.Close()
 
 	serveMux := CustomMux{http.NewServeMux()}
 	initRoutes(serveMux)
