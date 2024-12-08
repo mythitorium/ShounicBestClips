@@ -111,17 +111,19 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 		return
 	}
 
-	// TEST/FIX ME Endpoint time goes from ~5ms to 100-200ms
+	// Using Query instead of Exec.
+	// Exec is 10x-100x slower for some reason.
+	// Locking issue?
 	vote = &VoteOptions{time.Now(), a, b}
-	_, err = db.Exec(
+	rows, err := db.Query(
 		"INSERT OR REPLACE INTO active_votes VALUES (?, ?, ?, ?)",
 		user.id,
 		vote.startTime,
 		a,
 		b,
 	)
-	if err != nil {
-		return
+	if err == nil {
+		err = rows.Close()
 	}
 
 	return
