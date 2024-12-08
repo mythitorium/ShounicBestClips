@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"math/rand/v2"
 	"net"
 	"time"
 
@@ -32,8 +31,7 @@ func (db *Database) setup() (err error) {
 		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER, video_id INTEGER, score INTEGER)",
 		"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, ip TEXT UNIQUE)",
 		"CREATE TABLE IF NOT EXISTS active_votes ( " +
-			"id INTEGER PRIMARY KEY NOT NULL, " +
-			"user_id INTEGER UNIQUE NOT NULL, " +
+			"user_id INTEGER PRIMARY KEY NOT NULL, " +
 			"start_time INTEGER NOT NULL, " +
 			"a TEXT, " +
 			"b TEXT " +
@@ -113,12 +111,10 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 		return
 	}
 
-	vote = &VoteOptions{time.Now(), rand.Int64(), a, b}
-	row, err := db.Query(
-		"DELETE FROM active_votes WHERE user_id=?;"+
-			"INSERT INTO active_votes VALUES (?, ?, ?, ?, ?) RETURNING id;",
-		user.id,
-		vote.Id,
+	// TEST/FIX ME Endpoint time goes from ~5ms to 100-200ms
+	vote = &VoteOptions{time.Now(), a, b}
+	_, err = db.Exec(
+		"INSERT OR REPLACE INTO active_votes VALUES (?, ?, ?, ?)",
 		user.id,
 		vote.startTime,
 		a,
@@ -126,11 +122,6 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 	)
 	if err != nil {
 		return
-	}
-	defer row.Close()
-
-	if row.Next() {
-		err = row.Scan(&vote.Id)
 	}
 
 	return
