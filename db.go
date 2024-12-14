@@ -134,7 +134,9 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 // Empty a or b strings means not enough available voting options
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
-		"SELECT url FROM videos WHERE id NOT IN (SELECT video_url FROM votes WHERE user_id = ?) ORDER BY random() LIMIT 2",
+		"SELECT url FROM videos LEFT JOIN votes ON videos.url = votes.video_url "+
+			"WHERE (votes.user_id == 1 OR votes.user_id IS NULL) AND (votes.score IS NULL OR votes.score == 0) "+ // TODO vote.score == ? for round X of voting
+			"ORDER BY random() LIMIT 2",
 		user.id,
 	)
 	if err != nil {
@@ -188,7 +190,6 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	vote, err := db.GetCurrentVotingOptionsForUser(user)
 	if err != nil || vote == nil {
 		// If the user has no options, we'll do nothing
-		fmt.Printf("Nil %v %v\n", err, vote)
 		return
 	}
 
@@ -201,34 +202,20 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO limit max time? 12hours?
 
-	// Test if choice is a voting option
-	// We'll also set a bool for use in sql insert.
-	var isA bool
-	fmt.Println(choice)
-	fmt.Println(vote.A)
-	fmt.Println(vote.B)
-	switch choice {
-	case vote.A:
-		isA = true
-	case vote.B:
-		isA = false
-	default:
-		// Invalid vote choice, do nothing
+	if choice != vote.A && choice != vote.B {
 		fmt.Println("Invalid choice")
 		return
 	}
 
-	fmt.Println("INSERT INTO votes VALUES (?,?,?), (?,?,?)")
-	// TODO this currently only supports 1 round of voting.
+	// TODO only supports one round of votes
 	_, err = db.Exec(
-		"INSERT INTO votes VALUES (?,?,?), (?,?,?)",
+		"DELETE FROM active_votes WHERE user_id = ?;"+
+			"INSERT INTO votes VALUES (?, ?, 1);",
 		user.id,
-		vote.A,
-		isA,
 		user.id,
-		vote.B,
-		isA,
+		choice,
 	)
 	return
 }
+
 func (db *Database) IsUserQueueComplete(user User) (bool, err error) { return }
