@@ -28,8 +28,12 @@ func (db *Database) setup() (err error) {
 	var setupQueries = []string{
 		// TODO ? video: title, uploader, docSubmitter, upload date
 		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE)",
-		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER, video_id INTEGER, score INTEGER)",
 		"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, ip TEXT UNIQUE)",
+
+		// TODO constraint for (user, video) pairs
+		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL)",
+		// "CREATE UNIQUE IF NOT EXISTS INDEX idx_votes_user_video ON votes(user_id, video_url)",
+
 		"CREATE TABLE IF NOT EXISTS active_votes ( " +
 			"user_id INTEGER PRIMARY KEY NOT NULL, " +
 			"start_time INTEGER NOT NULL, " +
@@ -51,6 +55,7 @@ func (db *Database) setup() (err error) {
 	for _, query := range setupQueries {
 		_, err = db.Exec(query)
 		if err != nil {
+			tran.Rollback()
 			return
 		}
 	}
@@ -111,21 +116,17 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 		return
 	}
 
-	// Using Query instead of Exec.
 	// Exec is 10x-100x slower for some reason.
+	// Query has issues committing inserts
 	// Locking issue?
 	vote = &VoteOptions{time.Now(), a, b}
-	rows, err := db.Query(
+	_, err = db.Exec(
 		"INSERT OR REPLACE INTO active_votes VALUES (?, ?, ?, ?)",
 		user.id,
-		vote.startTime,
+		time.Now().UnixMilli(),
 		a,
 		b,
 	)
-	if err == nil {
-		err = rows.Close()
-	}
-
 	return
 }
 
@@ -133,7 +134,7 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 // Empty a or b strings means not enough available voting options
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
-		"SELECT url FROM videos WHERE id NOT IN (SELECT video_id FROM votes WHERE user_id = ?) ORDER BY random() LIMIT 2",
+		"SELECT url FROM videos WHERE id NOT IN (SELECT video_url FROM votes WHERE user_id = ?) ORDER BY random() LIMIT 2",
 		user.id,
 	)
 	if err != nil {
@@ -155,12 +156,79 @@ func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	return
 }
 
-func (db *Database) SubmitUserVote(user User, voteId VoteOptions, choice string) (err error) {
-	// TODO check if vote is expired
+func (db *Database) GetCurrentVotingOptionsForUser(user User) (vote *VoteOptions, err error) {
+	row, err := db.Query(
+		"SELECT start_time, a, b FROM active_votes WHERE user_id = ?",
+		user.id,
+	)
+	if err != nil {
+		return
+	}
+	defer row.Close()
 
-	// TODO check if user is voting too fast
-	// 			minTime := min(a.length, b.length) / 2
+	if !row.Next() {
+		// User has no vote options, returning nil
+		return
+	}
 
+	var startTime int64
+	vote = &VoteOptions{}
+	err = row.Scan(
+		&startTime,
+		&vote.A,
+		&vote.B,
+	)
+
+	vote.startTime = time.Unix(startTime, 0)
+
+	return
+}
+
+func (db *Database) SubmitUserVote(user User, choice string) (err error) {
+	vote, err := db.GetCurrentVotingOptionsForUser(user)
+	if err != nil || vote == nil {
+		// If the user has no options, we'll do nothing
+		fmt.Printf("Nil %v %v\n", err, vote)
+		return
+	}
+
+	// TODO scale min time to video length
+	// 	?	minTime := max(min(a.length, b.length) / 2, 90 * time.seconds)
+	// if vote.startTime.Add(30 * time.Second).After(time.Now()) {
+	// 	// User voting too fast, ignore vote
+	// 	return fmt.Errorf("too fast")
+	// }
+
+	// TODO limit max time? 12hours?
+
+	// Test if choice is a voting option
+	// We'll also set a bool for use in sql insert.
+	var isA bool
+	fmt.Println(choice)
+	fmt.Println(vote.A)
+	fmt.Println(vote.B)
+	switch choice {
+	case vote.A:
+		isA = true
+	case vote.B:
+		isA = false
+	default:
+		// Invalid vote choice, do nothing
+		fmt.Println("Invalid choice")
+		return
+	}
+
+	fmt.Println("INSERT INTO votes VALUES (?,?,?), (?,?,?)")
+	// TODO this currently only supports 1 round of voting.
+	_, err = db.Exec(
+		"INSERT INTO votes VALUES (?,?,?), (?,?,?)",
+		user.id,
+		vote.A,
+		isA,
+		user.id,
+		vote.B,
+		isA,
+	)
 	return
 }
 func (db *Database) IsUserQueueComplete(user User) (bool, err error) { return }

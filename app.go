@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 var database *Database
 
 // TODO vArgs
-var argDBFile = "votes.db"
+var argDBFile = "votes.db?_mutex=full"
 var argBindAddr = ":8081"
+var argMaxVoteTime = 4 * time.Hour
 
 func main() {
 	var err error
@@ -20,6 +22,15 @@ func main() {
 		panic(err)
 	}
 	defer database.Close()
+
+	{
+		_, err = database.Exec(
+			"INSERT INTO votes VALUES (99,'a',1), (99,'b',2)",
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	serveMux := CustomMux{http.NewServeMux()}
 	initRoutes(serveMux)

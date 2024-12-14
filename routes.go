@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -37,6 +38,7 @@ func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
 		return
 	}
 
+	// Send new vote to client
 	bytes, err := json.Marshal(options)
 	if err != nil {
 		w.WriteHeader(500)
@@ -50,18 +52,40 @@ func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
 }
 
 func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
-	// TODO Get CurrentVote from UUID
-	// TODO check CurrentVote time.
-	//		Users should spend at min 1 minute per vote
-	//		Depending on video lengths.
-	// 		If a user votes too fast, return 200 and
-	//		pretend we accepted it.
+	if err := req.ParseForm(); err != nil {
+		w.WriteHeader(406)
+		w.Write([]byte("Failed to parse form input."))
+		return
+	}
 
-	// TODO return 2xx when user has completed their queue
+	choice := req.PostForm.Get("choice")
+	if choice == "" {
+		w.WriteHeader(400)
+		w.Write([]byte("No choice given"))
+		return
+	}
 
-	w.Write([]byte("TODO submit vote"))
+	err := database.SubmitUserVote(user, choice)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to communicate with database."))
+		// TODO log to Sentry
+		fmt.Printf("Failed to submit vote from %v of \"%s\": %v\n", user, choice, err)
+		return
+	}
+
+	routeNextVote(w, req, user)
 }
 
 // TODO /myVotes
 
 // TODO /totalVotes
+
+func readJsonRequest(output *any, req *http.Request) (err error) {
+	data, err := io.ReadAll(req.Body)
+	if err != nil {
+		return err
+	}
+	defer req.Body.Close()
+	return json.Unmarshal(data, output)
+}
