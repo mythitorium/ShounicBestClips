@@ -17,7 +17,7 @@ func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 
 		start := time.Now()
 		handler(cw, r)
-		end := time.Since(start) / time.Millisecond
+		end := time.Since(start).Milliseconds()
 
 		fmt.Printf(
 			"[%s] %dms %d %s %s\n",
