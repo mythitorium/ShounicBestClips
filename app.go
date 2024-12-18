@@ -23,17 +23,10 @@ func main() {
 	}
 	defer database.Close()
 
-	{
-		_, err = database.Exec(
-			"INSERT INTO votes VALUES (99,'a',1), (99,'b',2)",
-		)
-		if err != nil {
-			panic(err)
-		}
-	}
-
 	serveMux := CustomMux{http.NewServeMux()}
-	initRoutes(serveMux)
+	if err = initRoutes(serveMux); err != nil {
+		panic(err)
+	}
 
 	fmt.Printf("Starting http server on %s\n", argBindAddr)
 	if err = http.ListenAndServe(argBindAddr, serveMux); err != nil {

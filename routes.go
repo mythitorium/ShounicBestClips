@@ -3,13 +3,19 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
-func initRoutes(serveMux CustomMux) {
+var rootTemplate *template.Template
+
+func initRoutes(serveMux CustomMux) (err error) {
 	serveMux.NewRoute("/", routeRoot)
 	serveMux.NewUserRoute("/nextVote", routeNextVote)
 	serveMux.NewUserRoute("/submitVote", routeSubmitVote)
+
+	rootTemplate, err = template.ParseFiles("index.html")
+	return
 }
 
 // Middleware TODO
@@ -17,7 +23,11 @@ func initRoutes(serveMux CustomMux) {
 
 // Base route, return HTML template
 func routeRoot(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("TODO return main page"))
+	if err := rootTemplate.Execute(w, nil); err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to execute template."))
+		fmt.Printf("Failed to execute template.")
+	}
 }
 
 func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
