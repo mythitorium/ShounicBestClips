@@ -1,21 +1,23 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
 )
 
-var rootTemplate *template.Template
+//go:embed templates/*.html
+var embedTemplates embed.FS
+var templates *template.Template
 
-func initRoutes(serveMux CustomMux) (err error) {
+func initRoutes(serveMux CustomMux) {
 	serveMux.NewRoute("/", routeRoot)
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
 
-	rootTemplate, err = template.ParseFiles("index.html")
-	return
+	templates = template.Must(template.ParseFS(embedTemplates, "templates/*.html"))
 }
 
 // Middleware TODO
@@ -23,7 +25,7 @@ func initRoutes(serveMux CustomMux) (err error) {
 
 // Base route, return HTML template
 func routeRoot(w http.ResponseWriter, req *http.Request) {
-	if err := rootTemplate.Execute(w, nil); err != nil {
+	if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to execute template."))
 		fmt.Printf("Failed to execute template.")

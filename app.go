@@ -24,9 +24,7 @@ func main() {
 	defer database.Close()
 
 	serveMux := CustomMux{http.NewServeMux()}
-	if err = initRoutes(serveMux); err != nil {
-		panic(err)
-	}
+	initRoutes(serveMux)
 
 	fmt.Printf("Starting http server on %s\n", argBindAddr)
 	if err = http.ListenAndServe(argBindAddr, serveMux); err != nil {
