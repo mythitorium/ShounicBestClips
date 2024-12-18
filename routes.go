@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 )
 
@@ -80,12 +79,3 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 // TODO /myVotes
 
 // TODO /totalVotes
-
-func readJsonRequest(output *any, req *http.Request) (err error) {
-	data, err := io.ReadAll(req.Body)
-	if err != nil {
-		return err
-	}
-	defer req.Body.Close()
-	return json.Unmarshal(data, output)
-}
