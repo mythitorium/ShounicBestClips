@@ -217,5 +217,3 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	)
 	return
 }
-
-func (db *Database) IsUserQueueComplete(user User) (bool, err error) { return }
