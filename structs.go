@@ -1,8 +1,11 @@
 package main
 
-import (
-	"time"
-)
+import "time"
+
+type User struct {
+	id uint
+	ip string
+}
 
 // Represents a vote sent to a user.
 // Contains a random UUID to prevent vote manipulation by modifying responses.
