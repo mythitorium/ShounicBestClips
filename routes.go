@@ -11,8 +11,8 @@ var rootTemplate *template.Template
 
 func initRoutes(serveMux CustomMux) (err error) {
 	serveMux.NewRoute("/", routeRoot)
-	serveMux.NewUserRoute("/nextVote", routeNextVote)
-	serveMux.NewUserRoute("/submitVote", routeSubmitVote)
+	serveMux.NewUserRoute("/vote/next", routeNextVote)
+	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
 
 	rootTemplate, err = template.ParseFiles("index.html")
 	return
