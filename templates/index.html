@@ -43,14 +43,14 @@
             frame1.id = "clip1"
             frame1.width = 500
             frame1.height = 315
-            frame1.src = "https://www.youtube.com/embed/JgJUbmGDc6k"
+            frame1.src = "{{.a}}"
             document.getElementById("clipBox1").appendChild(frame1)
     
            const frame2 = document.createElement('iframe')
             frame2.id = "clip2"
             frame2.width = 500
             frame2.height = 315
-            frame2.src = "https://www.youtube.com/embed/ttArr90NvWo"
+            frame2.src = "{{.b}}"
             document.getElementById("clipBox2").appendChild(frame2)
         };
     
