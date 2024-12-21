@@ -19,21 +19,21 @@
         </div>
     </div>
 
-        <div class="mainContent">
-            <div id="clipBox1">
-            </div>
-            <div id="clipBox2">
-            </div>
-            <div>
-                <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Vote</button>
-            </div>
-            <div>
-                <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
-            </div>
-            <div>
-                <button class="standardButton" id="submitVoteButton">Submit Vote</button>
-            </div>
+    <div class="mainContent">
+        <div id="clipBox1">
         </div>
+        <div id="clipBox2">
+        </div>
+        <div>
+            <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Vote</button>
+        </div>
+        <div>
+            <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
+        </div>
+        <div>
+            <button class="standardButton" id="submitVoteButton">Submit Vote</button>
+        </div>
+    </div>
 
 
     <script>
@@ -54,7 +54,7 @@
             toggleVoteButtons(false)
             toggleSubmitVoteButton(false)
             getClips()
-        };
+        }
 
         function getClips() {
             window.fetch("/vote/next", { headers: { 'Accept': 'application/json' } })
@@ -79,14 +79,14 @@
                 console.log("so cool");
                 const frame1 = document.createElement('iframe');
                 frame1.id = "clip1";
-                frame1.width = 500;
+                frame1.width = 560;
                 frame1.height = 315;
                 frame1.src = url_a;
                 clipBox1.appendChild(frame1);
                 
                 const frame2 = document.createElement('iframe');
                 frame2.id = "clip2";
-                frame2.width = 500;
+                frame2.width = 560;
                 frame2.height = 315;
                 frame2.src = url_b;
                 clipBox2.appendChild(frame2);
@@ -99,23 +99,23 @@
                 clipBox2.appendChild(createErrorText(url_b));
                 toggleVoteButtons(false);
             }
-        };
+        }
 
         function createErrorText(error) {
             var p = document.createElement('p');
             var text = document.createTextNode(error);
             p.appendChild(text);
             return p
-        };
+        }
 
         function toggleVoteButtons(enabled) {
             leftVoteButton.disabled = !enabled;
             rightVoteButton.disabled = !enabled;
-        };
+        }
 
         function toggleSubmitVoteButton(enabled) {
             submitVoteButton.disabled = !enabled;
-        };
+        }
 
         function shiftOptionTo(me) {
             if (me == "left") {
@@ -130,9 +130,9 @@
                 document.getElementById("clip1").classList.remove("selectedFrameState");
             }
             toggleSubmitVoteButton(true);
-        };
+        }
 
-       // Add iframes on page load
+        // Add iframes on page load
         window.onload = pageLoadStuff();;
     </script>
 </body>
