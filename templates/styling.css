@@ -134,7 +134,7 @@ iframe {
 .mainContent {
     --video-embed-w: 560px;
     --video-embed-h: 315px;
-    --row-gap: 20px;
+    --row-gap: 30px;
     --column-gap: 45px;
     --button-height: 55px;
 
