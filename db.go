@@ -135,7 +135,7 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
 		"SELECT url FROM videos LEFT JOIN votes ON videos.url = votes.video_url "+
-			"WHERE (votes.user_id == 1 OR votes.user_id IS NULL) AND (votes.score IS NULL OR votes.score == 0) "+ // TODO vote.score == ? for round X of voting
+			"WHERE (votes.user_id == ? OR votes.user_id IS NULL) AND (votes.score IS NULL OR votes.score == 0) "+ // TODO vote.score == ? for round X of voting
 			"ORDER BY random() LIMIT 2",
 		user.id,
 	)
