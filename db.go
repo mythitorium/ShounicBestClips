@@ -141,7 +141,7 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
 		"SELECT url FROM videos LEFT JOIN votes ON videos.url = votes.video_url "+
-			"WHERE (votes.user_id == ? OR votes.user_id IS NULL) AND (votes.score IS NULL OR votes.score == 0) "+ // TODO vote.score == ? for round X of voting
+			"WHERE (votes.user_id == ? OR votes.user_id IS NULL) AND (votes.score IS NULL) "+ // TODO vote.score == ? for round X of voting
 			"ORDER BY random() LIMIT 2",
 		user.id,
 	)
@@ -208,7 +208,13 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO limit max time? 12hours?
 
-	if choice != vote.A && choice != vote.B {
+	var other string
+	switch choice {
+	case vote.A:
+		other = vote.B
+	case vote.B:
+		other = vote.A
+	default:
 		fmt.Println("Invalid choice")
 		return
 	}
@@ -216,10 +222,12 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	// TODO only supports one round of votes
 	_, err = db.Exec(
 		"DELETE FROM active_votes WHERE user_id = ?;"+
-			"INSERT INTO votes VALUES (?, ?, 1);",
+			"INSERT INTO votes VALUES (?, ?, 1), (?, ?, 0);",
 		user.id,
 		user.id,
 		choice,
+		user.id,
+		other,
 	)
 	return
 }
