@@ -31,10 +31,10 @@
             <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
         </div>
         <div>
-            <form action="/vote/submit" method="POST">
-                <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="">Submit Vote</button>
-            </form>
-            
+            <!-- <form action="/vote/submit" method="POST" target="dummyframe">
+                <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="7777" onclick="rotateClips()">Submit Vote</button>
+            </form> -->
+            <button class="standardButton" id="submitVoteButton" onclick="rotateClips()">Submit Vote</button>
         </div>
         <div class="guideBox">
             <p>Epic Guide:</p>
@@ -46,6 +46,8 @@
                 <li>The more votes the better!</li>
             </ol> 
         </div>
+
+        <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
     </div>
 
 
@@ -60,6 +62,7 @@
         // url reference vars
         var left_url
         var right_url
+        var choice
 
         function pageLoadStuff() {
             clipBox1 = document.getElementById("clipBox1");
@@ -68,9 +71,9 @@
             rightVoteButton = document.getElementById("rightVoteButton");
             submitVoteButton = document.getElementById("submitVoteButton");
 
-            toggleVoteButtons(false)
-            toggleSubmitVoteButton(false)
-            getClips()
+            toggleVoteButtons(false);
+            toggleSubmitVoteButton(false);
+            getClips();
         }
 
         function getClips() {
@@ -88,6 +91,23 @@
                     console.log(json["a"], json["b"]);
                     addEmbeds(json["a"], json["b"]);
                 });
+        }
+
+
+        function rotateClips() {
+            var form = new FormData();
+            form.append("choice", choice);
+            const data = new URLSearchParams(form);
+            window.fetch("/vote/submit", { method: "POST", body: data, headers: new Headers() })
+                //.then((response) => {
+                //
+                //})
+            leftVoteButton.classList.remove("selectedButtonState");
+            rightVoteButton.classList.remove("selectedButtonState");
+            toggleVoteButtons(false);
+            toggleSubmitVoteButton(false);
+            removeCurrentEmbeds();
+            getClips();
         }
 
         // Add new iframes
@@ -121,6 +141,11 @@
             }
         }
 
+        function removeCurrentEmbeds() {
+            document.getElementById("clip1").remove()
+            document.getElementById("clip2").remove()
+        }
+
         function createErrorText(error) {
             var p = document.createElement('p');
             var text = document.createTextNode(error);
@@ -143,14 +168,14 @@
                 document.getElementById("clip1").classList.add("selectedFrameState");
                 rightVoteButton.classList.remove("selectedButtonState");
                 document.getElementById("clip2").classList.remove("selectedFrameState");
-                submitVoteButton.value = left_url
+                choice = left_url
 
             } else {
                 rightVoteButton.classList.add("selectedButtonState");
                 document.getElementById("clip2").classList.add("selectedFrameState");
                 leftVoteButton.classList.remove("selectedButtonState");
                 document.getElementById("clip1").classList.remove("selectedFrameState");
-                submitVoteButton.value = right_url
+                choice = right_url
             }
             toggleSubmitVoteButton(true);
         }
