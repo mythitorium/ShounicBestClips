@@ -14,6 +14,7 @@ var templates *template.Template
 
 func initRoutes(serveMux CustomMux) {
 	serveMux.NewRoute("/", routeRoot)
+	serveMux.NewRoute("/styling.css", stylingCSS)
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
 
@@ -25,11 +26,21 @@ func initRoutes(serveMux CustomMux) {
 
 // Base route, return HTML template
 func routeRoot(w http.ResponseWriter, req *http.Request) {
-	if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Failed to execute template."))
-		fmt.Printf("Failed to execute template.")
-	}
+	//if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
+	//	w.WriteHeader(500)
+	//	w.Write([]byte("Failed to execute template."))
+	//	fmt.Printf("Failed to execute template.")
+	//}
+
+	// we don't need templates
+	http.ServeFile(w, req, "templates/index.html")
+}
+
+// Serve that solja boy
+// becuase index.html has `styling.css` linked it makes a request for it, so  by just adding a route it automatically gets called and used
+// Probs suboptimal. idc tho lol. -myth
+func stylingCSS(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "templates/styling.css")
 }
 
 func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
@@ -85,7 +96,9 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 		return
 	}
 
-	routeNextVote(w, req, user)
+	// Removing this and manually making another get request is easier than handling get request when I submit data
+	// -myth
+	//routeNextVote(w, req, user)
 }
 
 // TODO /myVotes
