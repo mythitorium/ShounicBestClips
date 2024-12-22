@@ -31,7 +31,10 @@
             <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
         </div>
         <div>
-            <button class="standardButton" id="submitVoteButton">Submit Vote</button>
+            <form action="/vote/submit" method="POST">
+                <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="">Submit Vote</button>
+            </form>
+            
         </div>
         <div class="guideBox">
             <p>Epic Guide:</p>
@@ -53,6 +56,10 @@
         var leftVoteButton
         var rightVoteButton
         var submitVoteButton
+
+        // url reference vars
+        var left_url
+        var right_url
 
         function pageLoadStuff() {
             clipBox1 = document.getElementById("clipBox1");
@@ -101,6 +108,9 @@
                 frame2.src = url_b;
                 clipBox2.appendChild(frame2);
 
+                left_url = url_a
+                right_url = url_b
+
                 toggleVoteButtons(true);
             } else {
                 console.log("many such error");
@@ -133,11 +143,14 @@
                 document.getElementById("clip1").classList.add("selectedFrameState");
                 rightVoteButton.classList.remove("selectedButtonState");
                 document.getElementById("clip2").classList.remove("selectedFrameState");
+                submitVoteButton.value = left_url
+
             } else {
                 rightVoteButton.classList.add("selectedButtonState");
                 document.getElementById("clip2").classList.add("selectedFrameState");
                 leftVoteButton.classList.remove("selectedButtonState");
                 document.getElementById("clip1").classList.remove("selectedFrameState");
+                submitVoteButton.value = right_url
             }
             toggleSubmitVoteButton(true);
         }
