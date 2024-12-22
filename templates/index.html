@@ -100,15 +100,14 @@
             form.append("choice", choice);
             const data = new URLSearchParams(form);
             window.fetch("/vote/submit", { method: "POST", body: data, headers: new Headers() })
-                //.then((response) => {
-                //
-                //})
-            leftVoteButton.classList.remove("selectedButtonState");
-            rightVoteButton.classList.remove("selectedButtonState");
-            toggleVoteButtons(false);
-            toggleSubmitVoteButton(false);
-            removeCurrentEmbeds();
-            getClips();
+                .then((response) => {
+                    leftVoteButton.classList.remove("selectedButtonState");
+                    rightVoteButton.classList.remove("selectedButtonState");
+                    toggleVoteButtons(false);
+                    toggleSubmitVoteButton(false);
+                    removeCurrentEmbeds();
+                    getClips();
+                });
         }
 
         // Add new iframes
