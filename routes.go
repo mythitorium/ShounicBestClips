@@ -26,12 +26,14 @@ func initRoutes(serveMux CustomMux) {
 
 // Base route, return HTML template
 func routeRoot(w http.ResponseWriter, req *http.Request) {
-	if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Failed to execute template."))
-		fmt.Printf("Failed to execute template.")
-	}
+	//if err := templates.ExecuteTemplate(w, "index.html", nil); err != nil {
+	//	w.WriteHeader(500)
+	//	w.Write([]byte("Failed to execute template."))
+	//	fmt.Printf("Failed to execute template.")
+	//}
 
+	// we don't need templates
+	http.ServeFile(w, req, "templates/index.html")
 }
 
 // Serve that solja boy
