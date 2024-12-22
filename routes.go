@@ -38,7 +38,7 @@ func routeRoot(w http.ResponseWriter, req *http.Request) {
 
 // Serve that solja boy
 // becuase index.html has `styling.css` linked it makes a request for it, so  by just adding a route it automatically gets called and used
-// Probs suboptimal. idc tho lol.
+// Probs suboptimal. idc tho lol. -myth
 func stylingCSS(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "templates/styling.css")
 }
@@ -96,7 +96,9 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 		return
 	}
 
-	routeNextVote(w, req, user)
+	// Removing this and manually making another get request is easier than handling get request when I submit data
+	// -myth
+	//routeNextVote(w, req, user)
 }
 
 // TODO /myVotes
