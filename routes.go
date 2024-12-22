@@ -8,15 +8,14 @@ import (
 	"net/http"
 )
 
-//go:embed templates/*
-var embedTemplates embed.FS
+//go:embed www/*
+var embedWWW embed.FS
 
 func initRoutes(serveMux CustomMux) {
-	// serveMux.NewRoute("/styling.css", stylingCSS)
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
 
-	fs, err := fs.Sub(embedTemplates, "templates")
+	fs, err := fs.Sub(embedWWW, "www")
 	if err != nil {
 		panic(err)
 	}
