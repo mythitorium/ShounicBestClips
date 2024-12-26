@@ -20,6 +20,7 @@
 
     --color-text: #e9f1f5;
     --color-text-faded: #e9f1f5a6;
+    --color-text-footer: #e9f1f575;
     --color-header: #e9f1f5;
 
     --color-dark-text: #222d34;
@@ -248,6 +249,14 @@ form {
 .selectedFrameState {
     box-shadow: 0px 2px 0px var(--color-text);
 }
+
+/*
+.copyrightText {
+    height: 28px;
+    text-align: center;
+    color: var(--color-text-footer);
+}
+*/
 
 @media (max-width: 1100px){ 
     .menuBarWrapper {
