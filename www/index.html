@@ -141,6 +141,7 @@
                         rightVoteButton.classList.remove("selectedButtonState");
                         toggleVoteButtons(false);
                         toggleSubmitVoteButton(false);
+                        displayError(200, "");
                         removeCurrentEmbeds();
                         getClips();
                     }
@@ -163,23 +164,25 @@
             frame2.src = url_b;
             clipBox2.appendChild(frame2);
 
-            left_url = url_a
-            right_url = url_b
+            left_url = url_a;
+            right_url = url_b;
         }
 
         function displayError(code, message) {
-            if (code === 204) {
-                errorElement.innerHTML = `Error 204; You've submitted a vote for every single clip. Theres nothing left. lol?`;
-            } else if (code == 200) {
-                errorElement.innerHTML = "";
+            if (!(code === 200)) {
+                var messageToUse = message;
+                if (code === 204) {
+                    messageToUse = "You've submitted a vote for every single clip. There's nothing left. lol?";
+                }
+                errorElement.innerHTML = `Error ${code}; ${messageToUse}`;
             } else {
-                errorElement.innerHTML = `Error ${code}: ${message}`;
+                errorElement.innerHTML = "";
             }
         }
 
         function removeCurrentEmbeds() {
-            document.getElementById("clip1").remove()
-            document.getElementById("clip2").remove()
+            document.getElementById("clip1").remove();
+            document.getElementById("clip2").remove();
         }
 
         // Deprecated
