@@ -25,6 +25,7 @@ func initRoutes(serveMux CustomMux) {
 
 // Middleware TODO
 //		Rate limiting
+//      Prevent voting after a cutoff time
 
 func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
 	options, err := database.GetNextVoteForUser(user)
