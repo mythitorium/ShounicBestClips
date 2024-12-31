@@ -45,7 +45,17 @@ func (mux *CustomMux) NewUserRoute(pattern string, handler UserRouteFunc) {
 // Load the user from database.
 // If there is an error, a 500 error will automatically be written to the ResponseWriter.
 func (mux *CustomMux) loadUser(w http.ResponseWriter, r *http.Request) (user User, err error) {
-	user, err = database.GetUser(r.RemoteAddr)
+	var addr string
+	switch envBehindProxy {
+	case "cloudflare":
+		addr = r.Header.Get("CF-Connecting-IP")
+	case "nginx":
+		addr = r.Header.Get("X-Real-Ip")
+	default:
+		addr = r.RemoteAddr
+	}
+
+	user, err = database.GetUser(addr)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to get user!"))
