@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
+	"strings"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -71,9 +72,13 @@ func (db *Database) setup() (err error) {
 }
 
 func (db *Database) GetUser(remoteAddr string) (user User, err error) {
-	user.ip, _, err = net.SplitHostPort(remoteAddr)
-	if err != nil {
-		return
+	if strings.ContainsRune(remoteAddr, ':') {
+		user.ip, _, err = net.SplitHostPort(remoteAddr)
+		if err != nil {
+			return
+		}
+	} else {
+		user.ip = remoteAddr
 	}
 
 	// Get user from database
