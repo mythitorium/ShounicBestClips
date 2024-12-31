@@ -7,21 +7,22 @@ import (
 )
 
 type CustomMux struct{ *http.ServeMux }
-type RouteFunc func(http.ResponseWriter, *http.Request)
-type UserRouteFunc func(http.ResponseWriter, *http.Request, User)
+type RouteFunc func(http.ResponseWriter, *CustomRequest)
+type UserRouteFunc func(http.ResponseWriter, *CustomRequest, User)
 
 // Basic HTTP route with logging
 func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 	mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 		cw := &CustomResponseWriter{w, 200}
+		cr := &CustomRequest{r, ""}
 
 		start := time.Now()
-		handler(cw, r)
+		handler(cw, cr)
 		end := time.Since(start).Milliseconds()
 
 		fmt.Printf(
 			"[%s] %dms %d %s %s\n",
-			r.RemoteAddr,
+			cr.GetRealIP(),
 			end,
 			cw.statusCode,
 			r.Method,
@@ -32,7 +33,7 @@ func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 
 // HTTP route with User and logging.
 func (mux *CustomMux) NewUserRoute(pattern string, handler UserRouteFunc) {
-	mux.NewRoute(pattern, func(w http.ResponseWriter, r *http.Request) {
+	mux.NewRoute(pattern, func(w http.ResponseWriter, r *CustomRequest) {
 		user, err := mux.loadUser(w, r)
 		if err != nil {
 			return
@@ -44,18 +45,8 @@ func (mux *CustomMux) NewUserRoute(pattern string, handler UserRouteFunc) {
 
 // Load the user from database.
 // If there is an error, a 500 error will automatically be written to the ResponseWriter.
-func (mux *CustomMux) loadUser(w http.ResponseWriter, r *http.Request) (user User, err error) {
-	var addr string
-	switch envBehindProxy {
-	case "cloudflare":
-		addr = r.Header.Get("CF-Connecting-IP")
-	case "nginx":
-		addr = r.Header.Get("X-Real-Ip")
-	default:
-		addr = r.RemoteAddr
-	}
-
-	user, err = database.GetUser(addr)
+func (mux *CustomMux) loadUser(w http.ResponseWriter, r *CustomRequest) (user User, err error) {
+	user, err = database.GetUser(r.GetRealIP())
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to get user!"))
@@ -75,4 +66,23 @@ type CustomResponseWriter struct {
 func (rw *CustomResponseWriter) WriteHeader(code int) {
 	rw.statusCode = code
 	rw.ResponseWriter.WriteHeader(code)
+}
+
+type CustomRequest struct {
+	*http.Request
+	realIp string
+}
+
+func (r *CustomRequest) GetRealIP() string {
+	if r.realIp == "" {
+		switch envBehindProxy {
+		case "cloudflare":
+			r.realIp = r.Header.Get("CF-Connecting-IP")
+		case "nginx":
+			r.realIp = r.Header.Get("X-Real-Ip")
+		default:
+			r.realIp = r.RemoteAddr
+		}
+	}
+	return r.realIp
 }
