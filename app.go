@@ -3,21 +3,20 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
+	"os"
 )
 
 var database *Database
 
-// TODO vArgs
-var argDBFile = "votes.db?_mutex=full"
-var argBindAddr = ":8081"
-var argMaxVoteTime = 4 * time.Hour
+var envDBFile = getEnvOrDefault("CLIPS_DB", "votes.db?_mutex=full")
+var envBindAddr = getEnvOrDefault("CLIPS_BIND", ":8081")
+var envBehindProxy = os.Getenv("CLIPS_BEHIND_PROXY")
 
 func main() {
 	var err error
 
-	fmt.Printf("Loading database %s\n", argDBFile)
-	database, err = LoadDatabase(argDBFile)
+	fmt.Printf("Loading database %s\n", envDBFile)
+	database, err = LoadDatabase(envDBFile)
 	if err != nil {
 		panic(err)
 	}
@@ -26,8 +25,16 @@ func main() {
 	serveMux := CustomMux{http.NewServeMux()}
 	initRoutes(serveMux)
 
-	fmt.Printf("Starting http server on %s\n", argBindAddr)
-	if err = http.ListenAndServe(argBindAddr, serveMux); err != nil {
+	fmt.Printf("Starting http server on %s\n", envBindAddr)
+	if err = http.ListenAndServe(envBindAddr, serveMux); err != nil {
 		panic(err)
 	}
+}
+
+func getEnvOrDefault(key string, defValue string) (value string) {
+	value, exists := os.LookupEnv(key)
+	if !exists {
+		value = defValue
+	}
+	return
 }
