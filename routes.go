@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
+	"time"
 )
 
 //go:embed www/*
@@ -72,6 +73,12 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 		return
 	}
 
+	if time.Now().Unix() > votingDeadlineUnix {
+		w.WriteHeader(420)
+		w.Write([]byte("Deadline passed"))
+		return
+	}
+
 	err := database.SubmitUserVote(user, choice)
 	if err != nil {
 		w.WriteHeader(500)
@@ -87,7 +94,7 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 }
 
 func routeSendDeadline(w http.ResponseWriter, req *http.Request, user User) {
-	bytes, err := json.Marshal(map[string]string{"deadline": votingDeadlineUnix})
+	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix})
 
 	if err != nil {
 		w.WriteHeader(500)

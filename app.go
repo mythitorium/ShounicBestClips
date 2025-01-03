@@ -14,7 +14,8 @@ var argBindAddr = ":8081"
 var argMaxVoteTime = 4 * time.Hour
 
 // TODO: Make this less stupid -myth
-var votingDeadlineUnix = "1736496000"
+// NOTE: THIS WILL BE TIMEZONE SENSITIVE!!!!!!!!!!
+var votingDeadlineUnix int64 = 1736496000
 
 func main() {
 	var err error

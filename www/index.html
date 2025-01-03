@@ -112,7 +112,7 @@
                 return response.json();
             }).then((json) => {
                 console.log(json);
-                countDownDate = Number(json['deadline']) * 1000 // Deadline display implimentation is built around a miliseconds timestamp. 
+                countDownDate = json['deadline'] * 1000 // Deadline display implimentation is built around a miliseconds timestamp. 
                                                                 // 1000x'ing it to fit is easier.
             });
         }
