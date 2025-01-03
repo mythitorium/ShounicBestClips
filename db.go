@@ -49,11 +49,7 @@ func (db *Database) setup() (err error) {
 			"('https://www.youtube.com/embed/sZN5yJqDaYI')," +
 			"('https://www.youtube.com/embed/TQllQlElpz8')," +
 			"('https://www.youtube.com/embed/WRRC-Iw_OPg')," +
-			"('https://www.youtube.com/embed/TQllQlElpz8')," +
 			"('https://www.youtube.com/embed/72eGw4H2Ka8')," +
-			"('https://www.youtube.com/embed/mIpnpYsl-VY')," +
-			"('https://www.youtube.com/embed/0pnwE_Oy5WI')," +
-			"('https://www.youtube.com/embed/JgJUbmGDc6k')," +
 			"('https://www.youtube.com/embed/4LilrtDfLP0')," +
 			"('https://www.youtube.com/embed/uSlB4eznXoA')," +
 			"('https://www.youtube.com/embed/i9bYnBb42oY')," +
