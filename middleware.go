@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 )
@@ -81,7 +82,14 @@ func (r *CustomRequest) GetRealIP() string {
 		case "nginx":
 			r.realIp = r.Header.Get("X-Real-Ip")
 		default:
-			r.realIp = r.RemoteAddr
+			// IP forwarding headers do not include the port.
+			// We'll strip the port from r.RemoteAddr for consistency.
+			var err error
+			r.realIp, _, err = net.SplitHostPort(r.RemoteAddr)
+			if err != nil {
+				fmt.Printf("Failed to split port from \"%s\" %s", r.RemoteAddr, err)
+				r.realIp = r.RemoteAddr
+			}
 		}
 	}
 	return r.realIp
