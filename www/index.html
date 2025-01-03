@@ -188,7 +188,7 @@
 
         function displayError(code, message) {
             if (code === 9999) { // Client side error code. Aka do not add 'Error: <code>;' to the message
-                errorElement.innerHTML = messageToUse
+                errorElement.innerHTML = message;
             } else if (!(code === 200)) {
                 var messageToUse = message;
                 if (code === 204) {
