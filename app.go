@@ -13,6 +13,9 @@ var argDBFile = "votes.db?_mutex=full"
 var argBindAddr = ":8081"
 var argMaxVoteTime = 4 * time.Hour
 
+// TODO: Make this less stupid -myth
+var votingDeadlineUnix = "1736496000"
+
 func main() {
 	var err error
 

@@ -14,6 +14,7 @@ var embedWWW embed.FS
 func initRoutes(serveMux CustomMux) {
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
+	serveMux.NewUserRoute("/vote/deadline", routeSendDeadline)
 
 	fs, err := fs.Sub(embedWWW, "www")
 	if err != nil {
@@ -83,6 +84,19 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 	// Removing this and manually making another get request is easier than handling get request when I submit data
 	// -myth
 	//routeNextVote(w, req, user)
+}
+
+func routeSendDeadline(w http.ResponseWriter, req *http.Request, user User) {
+	bytes, err := json.Marshal(map[string]string{"deadline": votingDeadlineUnix})
+
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to prepare deadline."))
+		fmt.Printf("Failed to write json data regarding deadline timestamp")
+		return
+	}
+
+	w.Write(bytes)
 }
 
 // TODO /myVotes
