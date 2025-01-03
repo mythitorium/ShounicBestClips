@@ -29,7 +29,7 @@ func initRoutes(serveMux CustomMux) {
 //		Rate limiting
 //      Prevent voting after a cutoff time
 
-func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
+func routeNextVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	options, err := database.GetNextVoteForUser(user)
 	if err != nil {
 		w.WriteHeader(500)
@@ -59,7 +59,7 @@ func routeNextVote(w http.ResponseWriter, req *http.Request, user User) {
 	w.Write(bytes)
 }
 
-func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
+func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	if err := req.ParseForm(); err != nil {
 		w.WriteHeader(406)
 		w.Write([]byte("Failed to parse form input."))
@@ -93,7 +93,7 @@ func routeSubmitVote(w http.ResponseWriter, req *http.Request, user User) {
 	//routeNextVote(w, req, user)
 }
 
-func routeSendDeadline(w http.ResponseWriter, req *http.Request, user User) {
+func routeSendDeadline(w http.ResponseWriter, req *CustomRequest, user User) {
 	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix})
 
 	if err != nil {
