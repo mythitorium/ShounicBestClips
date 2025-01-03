@@ -1,3 +1,5 @@
+<!-- I'm basically the linus torvolds of webdev if you think about it -myth -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +10,24 @@
     <title>Best Clips of 2024</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styling.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="menuBarWrapper">
         <div class="menuBarContent">
-            <div><p>Shounic's Best Clips Of 2024</p></div>
-            <div><p>Voting ends in xx:xx:xx</p></div>
+            <div><p>Shounic's Best Clips of 2024</p></div>
+            <div><p id="countdownTracker"></p></div>
             <button class="menuButton">About</button>
-            <button class="menuButton">My Votes</button>
+            <button class="menuButton">Stats</button>
         </div>
     </div>
 
     <div class="mainContent">
-        <div id="clipBox1">
+        <div id="clipBox1" class="clipBox">
+            <svg id="iMissMyWife1" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
         </div>
-        <div id="clipBox2">
+        <div id="clipBox2" class="clipBox"> 
+            <svg id="iMissMyWife2" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
         </div>
         <div>
             <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Vote</button>
@@ -30,12 +35,13 @@
         <div>
             <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
         </div>
-        <div>
+        <div class="submitBox">
             <!-- <form action="/vote/submit" method="POST" target="dummyframe">
                 <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="7777" onclick="rotateClips()">Submit Vote</button>
             </form> -->
             <button class="standardButton" id="submitVoteButton" onclick="rotateClips()">Submit Vote</button>
         </div>
+        <p class="errorBox" id="errorElement">Error</p>
         <div class="guideBox">
             <p>Epic Guide:</p>
             <ol>
@@ -47,22 +53,35 @@
             </ol> 
         </div>
 
-        <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+        <!-- <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe> -->
     </div>
 
+    <!-- <p class="copyrightText">Copyright lololol</p> -->
 
     <script>
+        // This is the date & time voting will end
+        //
+        // NOTE: 
+        //  - MANUALLY SET THIS DATE BEFORE WEBSITE LAUNCH
+        //  - MAKE SURE TO CONSIDER TIMEZONES WHEN SETTING THE DATE
+        //  - THIS IS COSMETIC ONLY. Functionality exists to disable the buttons once this date has passed. However, this will only stop stupid people
+        var countDownDate = new Date("2025-02-01T00:00:00Z").getTime();     
+
         // element reference vars
-        var clipBox1
-        var clipBox2
-        var leftVoteButton
-        var rightVoteButton
-        var submitVoteButton
+        var clipBox1;
+        var clipBox2;
+        var leftVoteButton;
+        var rightVoteButton;
+        var submitVoteButton;
+        var countdownTracker;
+        var errorElement;
+        var brokenImage1;
+        var brokenImage2;
 
         // url reference vars
-        var left_url
-        var right_url
-        var choice
+        var left_url;
+        var right_url;
+        var choice;
 
         function pageLoadStuff() {
             clipBox1 = document.getElementById("clipBox1");
@@ -70,6 +89,10 @@
             leftVoteButton = document.getElementById("leftVoteButton");
             rightVoteButton = document.getElementById("rightVoteButton");
             submitVoteButton = document.getElementById("submitVoteButton");
+            countdownTracker = document.getElementById("countdownTracker");
+            errorElement = document.getElementById("errorElement");
+            brokenImage1 = document.getElementById("iMissMyWife1");
+            brokenImage2 = document.getElementById("iMissMyWife2");
 
             toggleVoteButtons(false);
             toggleSubmitVoteButton(false);
@@ -80,17 +103,27 @@
             window.fetch("/vote/next", { headers: { 'Accept': 'application/json' } })
                 .then((response) => {
                     console.log(response);
-                    if (!response.ok) {
-                        return { a : "err", b : `Error ${response.status}; ${response.statusText}` };
+                    // Format the error message as a successful payload lmfao
+                    if (!(response.status === 200)) {
+                        return { a : response.status, b : response.statusText };
                     }
-                    if (response.status === 204) {
-                        return { a : "err", b : `Error 204; You've submitted a vote for every single clip. Theres nothing left. lol?` };
-                    }
-                    return response.json();                
+                    return response.json();     
                 }).then((json) => {
                     console.log(json);
-                    console.log(json["a"], json["b"]);
-                    addEmbeds(json["a"], json["b"]);
+                    // Send the links to the embeds, otherwise post error message
+                    if (!Number.isInteger(json["a"])) {
+                        toggleBrokenEmbedSvgs(false);
+                        addEmbeds(json["a"], json["b"]);
+                        // clear error output
+                        displayError(200, "");
+                        toggleVoteButtons(true);
+                    } else {
+                        toggleBrokenEmbedSvgs(true);
+                        displayError(json["a"], json["b"]);
+                        toggleVoteButtons(false);
+                    }
+                    //console.log(json);
+                    //console.log(json["a"], json["b"]);
                 });
         }
 
@@ -101,57 +134,64 @@
             const data = new URLSearchParams(form);
             window.fetch("/vote/submit", { method: "POST", body: data, headers: new Headers() })
                 .then((response) => {
-                    leftVoteButton.classList.remove("selectedButtonState");
-                    rightVoteButton.classList.remove("selectedButtonState");
-                    toggleVoteButtons(false);
-                    toggleSubmitVoteButton(false);
-                    removeCurrentEmbeds();
-                    getClips();
+                    if (!(response.status === 200)) {
+                        displayError(response.status, response.statusText);
+                    } else {
+                        leftVoteButton.classList.remove("selectedButtonState");
+                        rightVoteButton.classList.remove("selectedButtonState");
+                        toggleVoteButtons(false);
+                        toggleSubmitVoteButton(false);
+                        displayError(200, "");
+                        removeCurrentEmbeds();
+                        getClips();
+                    }
                 });
         }
 
         // Add new iframes
         function addEmbeds(url_a, url_b) {
-            if (!(url_a === "err")) {
-                console.log("so cool");
-                const frame1 = document.createElement('iframe');
-                frame1.id = "clip1";
-                frame1.width = 560;
-                frame1.height = 315;
-                frame1.src = url_a;
-                clipBox1.appendChild(frame1);
-                
-                const frame2 = document.createElement('iframe');
-                frame2.id = "clip2";
-                frame2.width = 560;
-                frame2.height = 315;
-                frame2.src = url_b;
-                clipBox2.appendChild(frame2);
+            const frame1 = document.createElement('iframe');
+            frame1.id = "clip1";
+            frame1.width = 560;
+            frame1.height = 315;
+            frame1.src = url_a;
+            clipBox1.appendChild(frame1);
+            
+            const frame2 = document.createElement('iframe');
+            frame2.id = "clip2";
+            frame2.width = 560;
+            frame2.height = 315;
+            frame2.src = url_b;
+            clipBox2.appendChild(frame2);
 
-                left_url = url_a
-                right_url = url_b
+            left_url = url_a;
+            right_url = url_b;
+        }
 
-                toggleVoteButtons(true);
+        function displayError(code, message) {
+            if (!(code === 200)) {
+                var messageToUse = message;
+                if (code === 204) {
+                    messageToUse = "You've submitted a vote for every single clip. There's nothing left. lol?";
+                }
+                errorElement.innerHTML = `Error ${code}; ${messageToUse}`;
             } else {
-                console.log("many such error");
-                // Horrifically shitty error handling
-                clipBox1.appendChild(createErrorText(url_b));
-                clipBox2.appendChild(createErrorText(url_b));
-                toggleVoteButtons(false);
+                errorElement.innerHTML = "";
             }
         }
 
         function removeCurrentEmbeds() {
-            document.getElementById("clip1").remove()
-            document.getElementById("clip2").remove()
+            document.getElementById("clip1").remove();
+            document.getElementById("clip2").remove();
         }
 
-        function createErrorText(error) {
-            var p = document.createElement('p');
-            var text = document.createTextNode(error);
-            p.appendChild(text);
-            return p
-        }
+        // Deprecated
+        //function createErrorText(error) {
+        //    var p = document.createElement('p');
+        //    var text = document.createTextNode(error);
+        //    p.appendChild(text);
+        //    return p
+        //}
 
         function toggleVoteButtons(enabled) {
             leftVoteButton.disabled = !enabled;
@@ -160,6 +200,17 @@
 
         function toggleSubmitVoteButton(enabled) {
             submitVoteButton.disabled = !enabled;
+        }
+
+        function toggleBrokenEmbedSvgs(enabled) {
+            if (enabled) {
+                brokenImage1.classList.remove("hidden");
+                brokenImage2.classList.remove("hidden");
+            } else {
+                brokenImage1.classList.add("hidden");
+                brokenImage2.classList.add("hidden");
+            }
+            
         }
 
         function shiftOptionTo(me) {
@@ -180,7 +231,35 @@
             toggleSubmitVoteButton(true);
         }
 
-        // Add iframes on page load
+        // Update the count down every 1 second
+        var updateTimeFunc = setInterval(function() {        
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Are seconds worth using??? idk
+            if (days > 0) {
+                countdownTracker.innerHTML = "Voting ends in " + days + "d " + hours + "h " + minutes + "m";
+            } else {
+                countdownTracker.innerHTML = "Voting ends in " + hours + "h " + minutes + "m " ;
+            }
+            
+            // If the count down is over, write some text 
+            if (distance < 0) {
+               clearInterval(updateTimeFunc);
+               countdownTracker.innerHTML = "Voting has ended!";
+            }
+        }, 1000);
+
+        // Initalizationware
         window.onload = pageLoadStuff();;
     </script>
 </body>
