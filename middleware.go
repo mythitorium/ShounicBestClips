@@ -17,6 +17,19 @@ func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 		cw := &CustomResponseWriter{w, 200}
 		cr := &CustomRequest{r, ""}
 
+		if cr.GetRealIP() == "" {
+			fmt.Printf(
+				"Empty IP? cf-=%s x-real=%s remoteAddr=%s",
+				r.Header.Get("CF-Connecting-IP"),
+				r.Header.Get("X-Real-Ip"),
+				r.RemoteAddr,
+			)
+			// TODO log to sentry
+			cw.WriteHeader(511)
+			cw.Write([]byte("Empty IP? Try again, if this is persistent, contact @Gamecube762"))
+			return
+		}
+
 		start := time.Now()
 		handler(cw, cr)
 		end := time.Since(start).Milliseconds()
