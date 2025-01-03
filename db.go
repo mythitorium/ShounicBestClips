@@ -157,9 +157,7 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 // Empty a or b strings means not enough available voting options
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
-		"SELECT url FROM videos LEFT JOIN votes ON videos.url = votes.video_url "+
-			"WHERE (votes.user_id == ? OR votes.user_id IS NULL) AND (votes.score IS NULL) "+ // TODO vote.score == ? for round X of voting
-			"ORDER BY random() LIMIT 2",
+		"SELECT url FROM videos WHERE url NOT IN (SELECT video_url FROM votes WHERE user_id = ?) ORDER BY random() LIMIT 2",
 		user.id,
 	)
 	if err != nil {
