@@ -93,7 +93,7 @@ func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	//routeNextVote(w, req, user)
 }
 
-func routeSendDeadline(w http.ResponseWriter, req *http.Request, user User) {
+func routeSendDeadline(w http.ResponseWriter, req *CustomRequest, user User) {
 	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix})
 
 	if err != nil {
