@@ -223,13 +223,7 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO limit max time? 12hours?
 
-	var other string
-	switch choice {
-	case vote.A:
-		other = vote.B
-	case vote.B:
-		other = vote.A
-	default:
+	if choice != vote.A && choice != vote.B {
 		fmt.Println("Invalid choice")
 		return
 	}
@@ -237,12 +231,10 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	// TODO only supports one round of votes
 	_, err = db.Exec(
 		"DELETE FROM active_votes WHERE user_id = ?;"+
-			"INSERT INTO votes VALUES (?, ?, 1), (?, ?, 0);",
+			"INSERT INTO votes VALUES (?, ?, 1);",
 		user.id,
 		user.id,
 		choice,
-		user.id,
-		other,
 	)
 	return
 }
