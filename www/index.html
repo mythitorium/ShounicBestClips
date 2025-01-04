@@ -191,16 +191,21 @@
         }
 
         function displayError(code, message) {
-            if (code === -1) { // Client side error code. Aka do not add 'Error: <code>;' to the message
-                errorElement.innerHTML = message;
-            } else if (!(code === 200)) {
+            if (!(code === 200)) {
                 let messageToUse = message;
                 if (code === 204) {
-                    messageToUse = "You've submitted a vote for every single clip. There's nothing left. lol?";
+                    messageToUse = "You've submitted a vote for every single submitted clip, there is nothing left for you to vote on. Thank you for participating!";
                 } else if (code === 420) {
                     messageToUse = "The voting deadline has been reached, and voting has closed. Thank you for participating!";
                 }
-                errorElement.innerHTML = `Error ${code}; ${messageToUse}`;
+
+                let errorToUse = `Error ${code}; `;
+                // -1 is a client side error code. Aka do not add 'Error: <code>;' to the message
+                if (code === -1 || code === 204) {
+                    errorToUse = '';
+                }
+
+                errorElement.innerHTML = `${errorToUse}${messageToUse}`;
             } else {
                 errorElement.innerHTML = "";
             }

@@ -141,7 +141,7 @@ form {
 .contentWrapper {
     display: grid;
     grid-template-columns: 1fr minmax(0, 560px) 1fr;
-    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px 25px 160px 1fr;
+    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px minmax(25px, min-content) 160px 1fr;
     row-gap: 25px;
     column-gap: 20px;
 
