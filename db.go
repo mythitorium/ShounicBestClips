@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -11,7 +13,12 @@ import (
 )
 
 func LoadDatabase(file string) (db *Database, err error) {
-	conn, err := sql.Open("sqlite3", file)
+	err = os.MkdirAll("data", 0750)
+	if err != nil {
+		return
+	}
+
+	conn, err := sql.Open("sqlite3", filepath.Join("data", file))
 	db = &Database{conn}
 
 	if err == nil {
