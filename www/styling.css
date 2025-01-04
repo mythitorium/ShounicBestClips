@@ -199,7 +199,7 @@ form {
     vertical-align: middle;
     line-height: 55px;
     display: table-cell;
-    transition: 0.5s;
+    transition: opacity 1s;
 }
 
 .invis {

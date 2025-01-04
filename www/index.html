@@ -113,6 +113,7 @@
                 console.log(json);
                 countDownDate = json['deadline'] * 1000 // Deadline display implimentation is built around a miliseconds timestamp. 
                                                                 // 1000x'ing it to fit is easier.
+                setDeadlineCountdown();
             });
         }
 
@@ -255,7 +256,9 @@
         }
 
         // Update the count down every 1 second
-        const updateTimeFunc = setInterval(function() {
+        const updateTimeFunc = setInterval(setDeadlineCountdown, 1000);
+
+        function setDeadlineCountdown() {
             if (countDownDate > 0) {
                 // Get today's date and time
                 const now = new Date().getTime();
@@ -289,7 +292,7 @@
             } else {
                 countdownTracker.innerHTML = ""
             }    
-        }, 1000);
+        }
 
         // Becuase iframes do not natrually scale with the html elements they're apart of I have to MANUALLT force them to a specific size!!
         // FUCK this shit -myth
