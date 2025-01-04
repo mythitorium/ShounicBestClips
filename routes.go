@@ -16,6 +16,7 @@ func initRoutes(serveMux CustomMux) {
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
 	serveMux.NewUserRoute("/vote/deadline", routeSendDeadline)
+	serveMux.NewUserRoute("/vote/totals", routeTotals)
 
 	fs, err := fs.Sub(embedWWW, "www")
 	if err != nil {
@@ -108,4 +109,22 @@ func routeSendDeadline(w http.ResponseWriter, req *CustomRequest, user User) {
 
 // TODO /myVotes
 
-// TODO /totalVotes
+func routeTotals(w http.ResponseWriter, req *CustomRequest, user User) {
+	count, err := database.TallyVotes()
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to count votes."))
+		fmt.Println(err.Error())
+		return
+	}
+
+	bytes, err := json.Marshal(count)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to write Json."))
+		fmt.Println(err.Error())
+		return
+	}
+
+	w.Write(bytes)
+}

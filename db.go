@@ -241,3 +241,40 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	)
 	return
 }
+
+func (db *Database) TallyVotes() (count map[string]int, err error) {
+	count = make(map[string]int)
+
+	// Populate the map
+	row, err := db.Query("SELECT url FROM videos")
+	if err != nil {
+		return
+	}
+	defer row.Close()
+	for row.Next() {
+		var url string
+		err = row.Scan(&url)
+		if err != nil {
+			return
+		}
+		count[url] = 0
+	}
+
+	// Count the results
+	row2, err := db.Query("SELECT video_url, score FROM votes")
+	if err != nil {
+		return
+	}
+	defer row2.Close()
+	for row2.Next() {
+		var url string
+		var score int
+		err = row2.Scan(&url, &score)
+		if err != nil {
+			return
+		}
+		count[url] += score
+	}
+
+	return
+}
