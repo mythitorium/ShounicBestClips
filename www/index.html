@@ -11,38 +11,45 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styling.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 </head>
 <body>
-    <div class="menuBarWrapper">
-        <div class="menuBarContent">
-            <div><p>Shounic's Best Clips of 2024</p></div>
-            <div><p id="countdownTracker"></p></div>
-            <button class="menuButton">About</button>
-            <button class="menuButton">Stats</button>
-        </div>
+    <div class="headerWrapper">
+        <div></div>
+        <div class="pageTitle"><p class="pageTitleText">Shounic's Best Clips of 2024</p></div>
+        <button class="menuButton"><i class="ph ph-info menuBtnIcon"></i><p class="menuBtnText">About</p></button>
+        <button class="menuButton"><i class="ph ph-chart-bar-horizontal menuBtnIcon"></i><p class="menuBtnText">Stats</p></button>
+        <div></div>
     </div>
+    <div class="contentWrapper">
+        <!-- <div class="topPaddingBox"></div>
+        <div class="bottomPaddingBox"></div>
+        <div class="leftPaddingBox"></div>
+        <div class="rightPaddingBox"></div> -->
 
-    <div class="mainContent">
-        <div id="clipBox1" class="clipBox">
-            <svg id="iMissMyWife1" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+        <p class="contentHeader headerText invis" id="countdownTracker"></p>
+        <div class="embedBox1">
+            <div class="aspectRatioRespectingChad" id="clipBox1">
+                <svg id="iMissMyWife1" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+            </div>
         </div>
-        <div id="clipBox2" class="clipBox"> 
-            <svg id="iMissMyWife2" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+        <div class="embedBox2">
+            <div class="aspectRatioRespectingChad" id="clipBox2">
+                <svg id="iMissMyWife2" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+            </div>
         </div>
-        <div>
+        <div class="voteButtonBox1">
             <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Vote</button>
         </div>
-        <div>
+        <div class="voteButtonBox2">
             <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
         </div>
-        <div class="submitBox">
-            <!-- <form action="/vote/submit" method="POST" target="dummyframe">
-                <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="7777" onclick="rotateClips()">Submit Vote</button>
-            </form> -->
+        <div class="voteSubmitBox">
             <button class="standardButton" id="submitVoteButton" onclick="rotateClips()">Submit Vote</button>
         </div>
-        <p class="errorBox" id="errorElement">Error</p>
-        <div class="guideBox">
+        <p class="errorMessageBox" id="errorElement">Error</p>
+        <div class="guideBox" id="guideBox">
             <p>Epic Guide:</p>
             <ol>
                 <li>You will be given 2 random user-submitted clips.</li>
@@ -52,20 +59,11 @@
                 <li>The more votes the better!</li>
             </ol> 
         </div>
-
-        <!-- <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe> -->
     </div>
 
-    <!-- <p class="copyrightText">Copyright lololol</p> -->
 
     <script>
         // This is the date & time voting will end
-        //
-        // NOTE: 
-        //  - MANUALLY SET THIS DATE BEFORE WEBSITE LAUNCH
-        //  - MAKE SURE TO CONSIDER TIMEZONES WHEN SETTING THE DATE
-        //  - THIS IS COSMETIC ONLY. Functionality exists to disable the buttons once this date has passed. However, this will only stop stupid people
-        //let countDownDate = new Date("2025-02-01T00:00:00Z").getTime();     
         let countDownDate = -1
 
         // element reference vars
@@ -109,6 +107,7 @@
                 if (!(response.status === 200)) {
                     return { deadline: -1 };
                 }
+                countdownTracker.classList.remove('invis');
                 return response.json();
             }).then((json) => {
                 console.log(json);
@@ -168,17 +167,22 @@
 
         // Add new iframes
         function addEmbeds(url_a, url_b) {
+            // Doesn't matter which one I get the size of, both will be the same
+            var rect = clipBox1.getBoundingClientRect();
+
             const frame1 = document.createElement('iframe');
             frame1.id = "clip1";
-            frame1.width = 560;
-            frame1.height = 315;
+            //frame1.classList.add("parentRespectingVideoEmbed");
+            frame1.width = rect['width'];
+            frame1.height = rect['height'];
             frame1.src = url_a;
             clipBox1.appendChild(frame1);
             
             const frame2 = document.createElement('iframe');
             frame2.id = "clip2";
-            frame2.width = 560;
-            frame2.height = 315;
+            //frame2.classList.add("parentRespectingVideoEmbed");
+            frame2.width = rect['width'];
+            frame2.height = rect['height'];
             frame2.src = url_b;
             clipBox2.appendChild(frame2);
 
@@ -290,7 +294,24 @@
             }    
         }, 1000);
 
+        // Becuase iframes do not natrually scale with the html elements they're apart of I have to MANUALLT force them to a specific size!!
+        // FUCK this shit -myth
+        function resizeEmbeds() {
+            var rect = clipBox1.getBoundingClientRect();
+            var frame1 = document.getElementById("clip1");
+            if (!(frame1 === null)) {
+                frame1.width = rect['width'];
+                frame1.height = rect['height']; 
+            }
+            var frame2 = document.getElementById("clip2");
+            if (!(frame2 === null)) {
+                frame2.width = rect['width'];
+                frame2.height = rect['height']; 
+            }
+        }
+    
         window.onload = pageLoadStuff();
+        window.onresize = resizeEmbeds;
     </script>
 </body>
 </html>
