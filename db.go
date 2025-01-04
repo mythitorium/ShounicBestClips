@@ -3,13 +3,20 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
+	"path/filepath"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func LoadDatabase(file string) (db *Database, err error) {
-	conn, err := sql.Open("sqlite3", file)
+	err = os.MkdirAll("data", 0750)
+	if err != nil {
+		return
+	}
+
+	conn, err := sql.Open("sqlite3", filepath.Join("data", file))
 	db = &Database{conn}
 
 	if err == nil {
