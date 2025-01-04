@@ -8,6 +8,12 @@ Setup
 * `go mod tidy` to install get dependencies
 * `go run .` to run the project on port `8081`
 
+### Docker
+* Install [Docker](https://www.docker.com)
+* `docker build . -t shounic-best-clips` to build the docker image
+* `docker run --rm -p 8081:8081 -v shounic-best-clips-data:/app/data shounic-best-clips` to run the container
+* `docker volume rm shounic-best-clips-data` to delete the database volume
+
 Routes
 ---
 * `/` Main page
