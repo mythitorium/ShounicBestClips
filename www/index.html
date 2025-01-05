@@ -11,38 +11,45 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styling.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 </head>
 <body>
-    <div class="menuBarWrapper">
-        <div class="menuBarContent">
-            <div><p>Shounic's Best Clips of 2024</p></div>
-            <div><p id="countdownTracker"></p></div>
-            <button class="menuButton">About</button>
-            <button class="menuButton">Stats</button>
-        </div>
+    <div class="headerWrapper">
+        <div></div>
+        <div class="pageTitle"><p class="pageTitleText">Shounic's Best Clips of 2024</p></div>
+        <button class="menuButton"><i class="ph ph-info menuBtnIcon"></i><p class="menuBtnText">About</p></button>
+        <button class="menuButton"><i class="ph ph-chart-bar-horizontal menuBtnIcon"></i><p class="menuBtnText">Stats</p></button>
+        <div></div>
     </div>
+    <div class="contentWrapper">
+        <!-- <div class="topPaddingBox"></div>
+        <div class="bottomPaddingBox"></div>
+        <div class="leftPaddingBox"></div>
+        <div class="rightPaddingBox"></div> -->
 
-    <div class="mainContent">
-        <div id="clipBox1" class="clipBox">
-            <svg id="iMissMyWife1" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+        <p class="contentHeader headerText invis" id="countdownTracker"></p>
+        <div class="embedBox1">
+            <div class="aspectRatioRespectingChad" id="clipBox1">
+                <svg id="iMissMyWife1" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+            </div>
         </div>
-        <div id="clipBox2" class="clipBox"> 
-            <svg id="iMissMyWife2" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+        <div class="embedBox2">
+            <div class="aspectRatioRespectingChad" id="clipBox2">
+                <svg id="iMissMyWife2" xmlns="http://www.w3.org/2000/svg" width="68" height="68" fill="#000000" viewBox="0 0 256 256"><path d="M216,42H40A14,14,0,0,0,26,56V200a14,14,0,0,0,14,14h64a6,6,0,0,0,5.69-4.1l15.12-45.36,37.42-15a6,6,0,0,0,3.34-3.34l15-37.42L225.9,93.69A6,6,0,0,0,230,88V56A14,14,0,0,0,216,42ZM117.77,154.43a6,6,0,0,0-3.46,3.67L99.68,202H40a2,2,0,0,1-2-2V171.17l52.58-52.58a2,2,0,0,1,2.83,0L126,151.15ZM218,83.68,174.1,98.31a6,6,0,0,0-3.67,3.46l-15.05,37.61L138.1,146.3l-36.2-36.2a14,14,0,0,0-19.8,0L38,154.2V56a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2Zm9.51,33.18a6,6,0,0,0-5.41-.82L198.3,124a6,6,0,0,0-3.67,3.47L180,164l-36.56,14.63A6,6,0,0,0,140,182.3L132,206.1a6,6,0,0,0,5.69,7.9H216a14,14,0,0,0,14-14V121.73A6,6,0,0,0,227.51,116.86ZM218,200a2,2,0,0,1-2,2H146.06l4.42-13.26,36.37-14.55a6,6,0,0,0,3.34-3.34l14.55-36.37L218,130.06Z"></path></svg>
+            </div>
         </div>
-        <div>
-            <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Vote</button>
+        <div class="voteButtonBox1">
+            <button class="standardButton" id="leftVoteButton" onclick="shiftOptionTo('left')">Select A</button>
         </div>
-        <div>
-            <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Vote</button>
+        <div class="voteButtonBox2">
+            <button class="standardButton" id="rightVoteButton" onclick="shiftOptionTo('right')">Select B</button>
         </div>
-        <div class="submitBox">
-            <!-- <form action="/vote/submit" method="POST" target="dummyframe">
-                <button type='submit' class="standardButton" id="submitVoteButton" name="choice" value="7777" onclick="rotateClips()">Submit Vote</button>
-            </form> -->
-            <button class="standardButton" id="submitVoteButton" onclick="rotateClips()">Submit Vote</button>
+        <div class="voteSubmitBox">
+            <button class="standardButton" id="submitVoteButton" onclick="rotateClips()">Vote</button>
         </div>
-        <p class="errorBox" id="errorElement">Error</p>
-        <div class="guideBox">
+        <p class="errorMessageBox" id="errorElement">Error</p>
+        <div class="guideBox" id="guideBox">
             <p>Epic Guide:</p>
             <ol>
                 <li>You will be given 2 random user-submitted clips.</li>
@@ -52,37 +59,28 @@
                 <li>The more votes the better!</li>
             </ol> 
         </div>
-
-        <!-- <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe> -->
     </div>
 
-    <!-- <p class="copyrightText">Copyright lololol</p> -->
 
     <script>
         // This is the date & time voting will end
-        //
-        // NOTE: 
-        //  - MANUALLY SET THIS DATE BEFORE WEBSITE LAUNCH
-        //  - MAKE SURE TO CONSIDER TIMEZONES WHEN SETTING THE DATE
-        //  - THIS IS COSMETIC ONLY. Functionality exists to disable the buttons once this date has passed. However, this will only stop stupid people
-        //var countDownDate = new Date("2025-02-01T00:00:00Z").getTime();     
-        var countDownDate = -1
+        let countDownDate = -1
 
         // element reference vars
-        var clipBox1;
-        var clipBox2;
-        var leftVoteButton;
-        var rightVoteButton;
-        var submitVoteButton;
-        var countdownTracker;
-        var errorElement;
-        var brokenImage1;
-        var brokenImage2;
+        let clipBox1;
+        let clipBox2;
+        let leftVoteButton;
+        let rightVoteButton;
+        let submitVoteButton;
+        let countdownTracker;
+        let errorElement;
+        let brokenImage1;
+        let brokenImage2;
 
         // url reference vars
-        var left_url;
-        var right_url;
-        var choice;
+        let left_url;
+        let right_url;
+        let choice;
 
         function pageLoadStuff() {
             clipBox1 = document.getElementById("clipBox1");
@@ -109,11 +107,13 @@
                 if (!(response.status === 200)) {
                     return { deadline: -1 };
                 }
+                countdownTracker.classList.remove('invis');
                 return response.json();
             }).then((json) => {
                 console.log(json);
                 countDownDate = json['deadline'] * 1000 // Deadline display implimentation is built around a miliseconds timestamp. 
                                                                 // 1000x'ing it to fit is easier.
+                setDeadlineCountdown();
             });
         }
 
@@ -147,7 +147,7 @@
 
 
         function rotateClips() {
-            var form = new FormData();
+            let form = new FormData();
             form.append("choice", choice);
             const data = new URLSearchParams(form);
             window.fetch("/vote/submit", { method: "POST", body: data, headers: new Headers() })
@@ -168,17 +168,22 @@
 
         // Add new iframes
         function addEmbeds(url_a, url_b) {
+            // Doesn't matter which one I get the size of, both will be the same
+            var rect = clipBox1.getBoundingClientRect();
+
             const frame1 = document.createElement('iframe');
             frame1.id = "clip1";
-            frame1.width = 560;
-            frame1.height = 315;
+            //frame1.classList.add("parentRespectingVideoEmbed");
+            frame1.width = rect['width'];
+            frame1.height = rect['height'];
             frame1.src = url_a;
             clipBox1.appendChild(frame1);
             
             const frame2 = document.createElement('iframe');
             frame2.id = "clip2";
-            frame2.width = 560;
-            frame2.height = 315;
+            //frame2.classList.add("parentRespectingVideoEmbed");
+            frame2.width = rect['width'];
+            frame2.height = rect['height'];
             frame2.src = url_b;
             clipBox2.appendChild(frame2);
 
@@ -187,16 +192,21 @@
         }
 
         function displayError(code, message) {
-            if (code === 9999) { // Client side error code. Aka do not add 'Error: <code>;' to the message
-                errorElement.innerHTML = message;
-            } else if (!(code === 200)) {
-                var messageToUse = message;
+            if (!(code === 200)) {
+                let messageToUse = message;
                 if (code === 204) {
-                    messageToUse = "You've submitted a vote for every single clip. There's nothing left. lol?";
+                    messageToUse = "You've submitted a vote for every single submitted clip, there is nothing left for you to vote on. Thank you for participating!";
                 } else if (code === 420) {
                     messageToUse = "The voting deadline has been reached, and voting has closed. Thank you for participating!";
                 }
-                errorElement.innerHTML = `Error ${code}; ${messageToUse}`;
+
+                let errorToUse = `Error ${code}; `;
+                // -1 is a client side error code. Aka do not add 'Error: <code>;' to the message
+                if (code === -1 || code === 204) {
+                    errorToUse = '';
+                }
+
+                errorElement.innerHTML = `${errorToUse}${messageToUse}`;
             } else {
                 errorElement.innerHTML = "";
             }
@@ -206,14 +216,6 @@
             document.getElementById("clip1").remove();
             document.getElementById("clip2").remove();
         }
-
-        // Deprecated
-        //function createErrorText(error) {
-        //    var p = document.createElement('p');
-        //    var text = document.createTextNode(error);
-        //    p.appendChild(text);
-        //    return p
-        //}
 
         function toggleVoteButtons(enabled) {
             leftVoteButton.disabled = !enabled;
@@ -236,7 +238,7 @@
         }
 
         function shiftOptionTo(me) {
-            if (me == "left") {
+            if (me === "left") {
                 leftVoteButton.classList.add("selectedButtonState");
                 document.getElementById("clip1").classList.add("selectedFrameState");
                 rightVoteButton.classList.remove("selectedButtonState");
@@ -254,42 +256,62 @@
         }
 
         // Update the count down every 1 second
-        var updateTimeFunc = setInterval(function() {
+        const updateTimeFunc = setInterval(setDeadlineCountdown, 1000);
+
+        function setDeadlineCountdown() {
             if (countDownDate > 0) {
                 // Get today's date and time
-                var now = new Date().getTime();
+                const now = new Date().getTime();
 
-                // Find the distance between now and the count down date
-                var distance = countDownDate - now;
+                // Find the distance between now and the countdown date
+                const distance = countDownDate - now;
 
                 // Time calculations for days, hours, minutes and seconds
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-                // Are seconds worth using??? idk
+                // Are seconds worth using???
+
+                // No, they are not.
+                // Arzumify
                 if (days > 0) {
                     countdownTracker.innerHTML = "Voting ends in " + days + "d " + hours + "h " + minutes + "m";
                 } else {
                     countdownTracker.innerHTML = "Voting ends in " + hours + "h " + minutes + "m " ;
                 }
 
-                // If the count down is over, write some text 
+                // If the countdown is over, write some text
                 if (distance < 0) {
                     clearInterval(updateTimeFunc);
                     toggleVoteButtons(false);
                     toggleSubmitVoteButton(false);
-                    displayError(9999, "The voting deadline has been reached, and voting has closed. Thank you for participating!")
+                    displayError(-1, "The voting deadline has been reached, and voting has closed. Thank you for participating!")
                     countdownTracker.innerHTML = "Voting has ended!";
                 }
             } else {
                 countdownTracker.innerHTML = ""
             }    
-        }, 1000);
+        }
 
-        // Initalizationware
+        // Becuase iframes do not natrually scale with the html elements they're apart of I have to MANUALLT force them to a specific size!!
+        // FUCK this shit -myth
+        function resizeEmbeds() {
+            var rect = clipBox1.getBoundingClientRect();
+            var frame1 = document.getElementById("clip1");
+            if (!(frame1 === null)) {
+                frame1.width = rect['width'];
+                frame1.height = rect['height']; 
+            }
+            var frame2 = document.getElementById("clip2");
+            if (!(frame2 === null)) {
+                frame2.width = rect['width'];
+                frame2.height = rect['height']; 
+            }
+        }
+    
         window.onload = pageLoadStuff();
+        window.onresize = resizeEmbeds;
     </script>
 </body>
 </html>
