@@ -15,7 +15,9 @@ var embedWWW embed.FS
 func initRoutes(serveMux CustomMux) {
 	serveMux.NewUserRoute("/vote/next", routeNextVote)
 	serveMux.NewUserRoute("/vote/submit", routeSubmitVote)
-	serveMux.NewUserRoute("/vote/deadline", routeSendDeadline)
+
+	serveMux.NewRoute("/vote/deadline", routeSendDeadline)
+	serveMux.NewRoute("/vote/totals", routeTotals)
 
 	fs, err := fs.Sub(embedWWW, "www")
 	if err != nil {
@@ -93,7 +95,7 @@ func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	//routeNextVote(w, req, user)
 }
 
-func routeSendDeadline(w http.ResponseWriter, req *CustomRequest, user User) {
+func routeSendDeadline(w http.ResponseWriter, req *CustomRequest) {
 	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix})
 
 	if err != nil {
@@ -108,4 +110,22 @@ func routeSendDeadline(w http.ResponseWriter, req *CustomRequest, user User) {
 
 // TODO /myVotes
 
-// TODO /totalVotes
+func routeTotals(w http.ResponseWriter, req *CustomRequest) {
+	count, err := database.TallyVotes()
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to count votes."))
+		fmt.Println(err.Error())
+		return
+	}
+
+	bytes, err := json.Marshal(count)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Failed to write Json."))
+		fmt.Println(err.Error())
+		return
+	}
+
+	w.Write(bytes)
+}
