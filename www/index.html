@@ -50,10 +50,10 @@
         </div>
         <div class="gigaErrorMessageBoxRoot">
             <div>
-                <div class="floatingGigaErrorMessageBox"><p id="gigaErrorMessage">You've submitted a vote for every single clip. There is nothing left for you to vote on.</p></div>
+                <div class="floatingGigaErrorMessageBox"><p id="gigaErrorMessage"></p></div>
             </div>
         </div>
-        <p class="errorMessageBox" id="errorElement">Error</p>
+        <p class="errorMessageBox" id="errorElement"></p>
         <div class="guideBox" id="guideBox">
             <p>Epic Guide:</p>
             <ol>
@@ -81,6 +81,7 @@
         let errorElement;
         let brokenImage1;
         let brokenImage2;
+        let gigaErrorMessage;
 
         // url reference vars
         let left_url;
@@ -97,6 +98,7 @@
             errorElement = document.getElementById("errorElement");
             brokenImage1 = document.getElementById("iMissMyWife1");
             brokenImage2 = document.getElementById("iMissMyWife2");
+            gigaErrorMessage = document.getElementById("gigaErrorMessage");
 
             toggleVoteButtons(false);
             toggleSubmitVoteButton(false);
@@ -198,36 +200,41 @@
 
         function displayError(code, message) {
             if (!(code === 200)) {
+                // Prepare the message
                 let messageToUse = message;
-                if (code === 204) {
-                    messageToUse = '';
-                    //messageToUse = "You've submitted a vote for every single submitted clip, there is nothing left for you to vote on. Thank you for participating!";
-                } else if (code === 420) {
+
+                if (code === 420) {
                     messageToUse = "The voting deadline has been reached, and voting has closed. Thank you for participating!";
+                } else if (code === 204) {
+                    messageToUse = "You've submitted a vote for every single clip. There is nothing left for you to vote on."
+                // Internal error code -1 : Deadline has passed error 
+                } else if (code === -1) {
+                    messageTouse = "The voting deadline has been reached, and voting has closed.";
                 }
 
                 let errorToUse = `Error ${code}; `;
-                // -1 is a client side error code. Aka do not add 'Error: <code>;' to the message
-                if (code === -1 || code === 204) {
-                    errorToUse = '';
-                }
 
-                errorElement.innerHTML = `${errorToUse}${messageToUse}`;
+                // Error codes where the message will get be giga, ie needs to be big so users will SEE them
+                // All errors below 0 are internal client-side only error codes
+                if (code < 0 || code === 204) {
+                    displayGigaError(messageToUse);
+                // Everything else will be treated as normal
+                } else {
+                    errorElement.innerHTML = `${errorToUse}${messageToUse}`;
+                }   
             } else {
                 errorElement.innerHTML = "";
             }
-
-            if (code === 204) {
-                displayGigaError();
-            }
         }
 
-        function displayGigaError() {
+        function displayGigaError(message) {
             document.getElementById('uiBox1').classList.add('makingRoomForTheBigErrorMessage');
             document.getElementById('uiBox2').classList.add('makingRoomForTheBigErrorMessage');
             document.getElementById('uiBox3').classList.add('makingRoomForTheBigErrorMessage');
             document.getElementById('uiBox4').classList.add('makingRoomForTheBigErrorMessage');
             document.getElementById('uiBox5').classList.add('makingRoomForTheBigErrorMessage');
+
+            gigaErrorMessage.innerHTML = message;
         }
 
         function removeCurrentEmbeds() {
@@ -304,7 +311,7 @@
                     clearInterval(updateTimeFunc);
                     toggleVoteButtons(false);
                     toggleSubmitVoteButton(false);
-                    displayError(-1, "The voting deadline has been reached, and voting has closed. Thank you for participating!")
+                    displayError(-1, "")
                     countdownTracker.innerHTML = "Voting has ended!";
                 }
             } else {
@@ -312,7 +319,7 @@
             }    
         }
 
-        // Becuase iframes do not natrually scale with the html elements they're apart of I have to MANUALLT force them to a specific size!!
+        // Becuase iframes do not natrually scale with the html elements they're apart of I have to MANUALLY force them to a specific size!!
         // FUCK this shit -myth
         function resizeEmbeds() {
             var rect = clipBox1.getBoundingClientRect();
