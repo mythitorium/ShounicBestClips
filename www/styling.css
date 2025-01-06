@@ -145,7 +145,7 @@ form {
 .contentWrapper {
     display: grid;
     grid-template-columns: 1fr minmax(0, 560px) 1fr;
-    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px minmax(25px, min-content) 160px 1fr;
+    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
     row-gap: 25px;
     column-gap: 20px;
 
@@ -164,21 +164,25 @@ form {
 
 @media (min-width: 950px) { 
     .contentWrapper {
-        grid-template-columns: 1fr minmax(300px, 560px) minmax(300px, 560px) 1fr;
-        grid-template-rows: 1fr 55px max-content 55px 55px 25px 160px 1fr;
-        column-gap: 45px;
+        grid-template-columns: 1fr minmax(300px, 560px) 0px minmax(300px, 560px) 1fr;
+        grid-template-rows: 1fr 55px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
+        column-gap: 22px;
         grid-template-areas: 
-        ". .    .    ."
-        ". head head ."
-        ". vid1 vid2 ."
-        ". vot1 vot2 ."
-        ". vsub vsub ."
-        ". errm errm ."
-        ". guid guid ."
-        ". .    .    .";
+        ". .    .    .    ."
+        ". head head head ."
+        ". vid1 .    vid2 ."
+        ". vot1 .    vot2 ."
+        ". vsub vsub vsub ."
+        ". errm errm errm ."
+        ". guid guid guid ."
+        ". .    .    .    .";
     }
 }
 
+
+.gigaErrorMessageBox {
+    grid-area: berr;
+}
 
 .leftPaddingBox {
     grid-area: lpad;
@@ -270,6 +274,7 @@ form {
     grid-area: errm;
     text-align: center;
     vertical-align: middle;
+    font-size: 18px;
 }
 
 .guideBox {
@@ -308,6 +313,10 @@ form {
         text-align: center;
         font-size: 16px;
         list-style-position: inside;
+    }
+
+    .errorMessageBox {
+        font-size: 16px;
     }
 }
 
