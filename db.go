@@ -226,7 +226,13 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO limit max time? 12hours?
 
-	if choice != vote.A && choice != vote.B {
+	var other string
+	switch choice {
+	case vote.A:
+		other = vote.B
+	case vote.B:
+		other = vote.A
+	default:
 		fmt.Println("Invalid choice")
 		return
 	}
@@ -234,10 +240,49 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	// TODO only supports one round of votes
 	_, err = db.Exec(
 		"DELETE FROM active_votes WHERE user_id = ?;"+
-			"INSERT INTO votes VALUES (?, ?, 1);",
+			"INSERT INTO votes VALUES (?, ?, 1), (?, ?, 0);",
 		user.id,
 		user.id,
 		choice,
+		user.id,
+		other,
 	)
+	return
+}
+
+func (db *Database) TallyVotes() (count map[string]int, err error) {
+	count = make(map[string]int)
+
+	// Populate the map
+	row, err := db.Query("SELECT url FROM videos")
+	if err != nil {
+		return
+	}
+	defer row.Close()
+	for row.Next() {
+		var url string
+		err = row.Scan(&url)
+		if err != nil {
+			return
+		}
+		count[url] = 0
+	}
+
+	// Count the results
+	row2, err := db.Query("SELECT video_url, score FROM votes")
+	if err != nil {
+		return
+	}
+	defer row2.Close()
+	for row2.Next() {
+		var url string
+		var score int
+		err = row2.Scan(&url, &score)
+		if err != nil {
+			return
+		}
+		count[url] += score
+	}
+
 	return
 }
