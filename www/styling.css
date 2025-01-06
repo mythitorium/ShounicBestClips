@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
 :root {
     /* shounic color :3 */
     --color-bg: #304654;
@@ -13,11 +11,12 @@
     --color-standard-button: #7494ae;
     --color-standard-button-selected: #d0dce6;
 
-    /*
-    --color-link-hover:
-    --color-link-active:
-    --color-link-resting:
-    */
+    
+    --color-link-hover: #19a8f6;
+    --color-link-active: #19a8f6;
+    --color-link-resting: #19a8f6;
+    --color-link-visited: #ff8e2a;
+    
 
     --color-text: #e9f1f5;
     --color-text-faded: #e9f1f5a6;
@@ -26,24 +25,31 @@
 
     --color-dark-text: #222d34;
 
-    /* overflow-y: scroll; */
+    /* 'Afacad Flux' */
 
     --min-double-wide-width: 500px;
+
+    --font: Arial;
 }
 
-/* for debug :3
+/* for debug :3 */
+/*
 * { 
     outline: 1px solid lime;
     outline-offset: -1px;
 }
 */
 
+
 path { fill: var(--color-dark-bg); }
 
-a { color: var(--alt-hover-color); }
-a:focus { color: var(--alt-hover-color); }
-a:hover { color: var(--hover-color); }
-a:active { color: var(--selected-color); }
+
+a { color: var(--color-link-resting); }
+a:focus { color: var(--color-link-resting); }
+a:hover { color: var(--color-link-resting); }
+a:active { color: var(--color-link-resting); }
+a:visited  { color: var(--color-link-visited); }
+
 
 body {
     background-color: var(--color-bg); 
@@ -53,7 +59,7 @@ body {
     flex: 1;
     border: none;
     display: grid;
-    grid-template-rows: 75px 1fr;
+    grid-template-rows: 75px 1fr min-content;
 }
 
 html {
@@ -67,7 +73,7 @@ p {
     padding: 0;
     margin: 0;
     color: var(--color-text);
-    font-family: 'Afacad Flux';
+    font-family: var(--font);
 }
 
 
@@ -77,7 +83,8 @@ p {
 }
 
 .pageTitleText {
-    font-size: 34px;
+    font-size: 30px;
+    text-align: center;
 }
 
 @media (max-width: 560px) {
@@ -94,7 +101,7 @@ p {
 
 
 button {
-    font-family: 'Afacad Flux';
+    font-family: var(--font);
     font-size: 22px;
     color: var(--color-text);
     border: none;
@@ -114,20 +121,20 @@ form {
 
 .headerWrapper {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 700px) 135px 135px 1fr;
+    grid-template-columns: 1fr minmax(0, 700px) 1fr;
     background-color: var(--color-dark-bg);
     overflow: hidden;
 }
 
 @media (max-width: 800px) {
     .headerWrapper {
-        grid-template-columns: 1fr minmax(0, 700px) 100px 100px 1fr;
+        grid-template-columns: 1fr minmax(0, 700px) 1fr;
     }
 }
 
 @media (max-width: 650px) {
     .headerWrapper {
-        grid-template-columns: 1fr minmax(0, 700px) 75px 75px 1fr;
+        grid-template-columns: 1fr minmax(0, 700px) 1fr;
     }
 }
 
@@ -136,12 +143,13 @@ form {
     margin-right: 10px;
     display: grid;
     align-content: center;
+    justify-content: center;
 }
 
 .contentWrapper {
     display: grid;
     grid-template-columns: 1fr minmax(0, 560px) 1fr;
-    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px minmax(25px, min-content) 160px 1fr;
+    grid-template-rows: 1fr 55px max-content 55px 0px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
     row-gap: 25px;
     column-gap: 20px;
 
@@ -150,6 +158,7 @@ form {
         ". head ."
         ". vid1 ."
         ". vot1 ."
+        ". gerr ."
         ". vid2 ."
         ". vot2 ."
         ". vsub ."
@@ -158,24 +167,94 @@ form {
         ". . .";
 }
 
-@media (min-width: 950px) { 
-    .contentWrapper {
-        grid-template-columns: 1fr minmax(300px, 560px) minmax(300px, 560px) 1fr;
-        grid-template-rows: 1fr 55px max-content 55px 55px 25px 160px 1fr;
-        column-gap: 45px;
-        grid-template-areas: 
-        ". .    .    ."
-        ". head head ."
-        ". vid1 vid2 ."
-        ". vot1 vot2 ."
-        ". vsub vsub ."
-        ". errm errm ."
-        ". guid guid ."
-        ". .    .    .";
+.gigaErrorMessageBoxRoot {
+    grid-area: gerr;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.gigaErrorMessageBoxRoot > div {
+    position: relative;
+}
+
+.floatingGigaErrorMessageBox {
+    --width: 100vw;
+    --height: 120px;
+
+    position: absolute;
+    width: var(--width);
+    height: var(--height);
+    left: calc(var(--width) / -2);
+    top: calc(var(--height) / -2);
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    background-color: #222d34af;
+}
+
+#gigaErrorMessage {
+    font-family: var(--font);
+    font-size: 30px;
+    text-align: center;
+    max-width: 700px;
+
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+
+@media (max-width: 750px) { 
+    #gigaErrorMessage {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 550px) { 
+    #gigaErrorMessage {
+        font-size: 22px;
     }
 }
 
 
+.makingRoomForTheBigErrorMessage {
+    opacity: 0.5;
+}
+
+
+@media (min-width: 950px) { 
+    .contentWrapper {
+        grid-template-columns: 1fr minmax(300px, 560px) 2px minmax(300px, 560px) 1fr;
+        grid-template-rows: 1fr 55px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
+        column-gap: 22px;
+        grid-template-areas: 
+        ". .    .    .    ."
+        ". head head head ."
+        ". vid1 gerr vid2 ."
+        ". vot1 gerr vot2 ."
+        ". vsub vsub vsub ."
+        ". errm errm errm ."
+        ". guid guid guid ."
+        ". .    .    .    .";
+    }
+
+    .floatingGigaErrorMessageBox {
+        --width: 800px;
+        left: calc(var(--width) / -2);
+        top: calc(var(--height) / -2);
+
+        background-color: inherit;
+    }
+
+    .makingRoomForTheBigErrorMessage {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/*
 .leftPaddingBox {
     grid-area: lpad;
 }
@@ -191,6 +270,10 @@ form {
 .bottomPaddingBox {
     grid-area: bpad;
 }
+*/
+
+
+
 
 
 .contentHeader {
@@ -266,6 +349,7 @@ form {
     grid-area: errm;
     text-align: center;
     vertical-align: middle;
+    font-size: 18px;
 }
 
 .guideBox {
@@ -285,7 +369,7 @@ form {
     margin: 0;
     margin-top: 8px;
     color: var(--color-text);
-    font-family: 'Afacad Flux';
+    font-family: var(--font);
 }
 
 
@@ -305,7 +389,20 @@ form {
         font-size: 16px;
         list-style-position: inside;
     }
+
+    .errorMessageBox {
+        font-size: 16px;
+    }
 }
+
+.footerBox {
+    color: var(--color-text-faded);
+    text-align: center;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 7px;
+}
+
 
 .menuButton {
     background-color: transparent;
