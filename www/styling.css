@@ -34,10 +34,12 @@
 }
 
 /* for debug :3 */
+/*
 * { 
     outline: 1px solid lime;
     outline-offset: -1px;
 }
+*/
 
 
 path { fill: var(--color-dark-bg); }
@@ -145,7 +147,7 @@ form {
 .contentWrapper {
     display: grid;
     grid-template-columns: 1fr minmax(0, 560px) 1fr;
-    grid-template-rows: 1fr 55px max-content 55px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
+    grid-template-rows: 1fr 55px max-content 55px 0px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
     row-gap: 25px;
     column-gap: 20px;
 
@@ -154,6 +156,7 @@ form {
         ". head ."
         ". vid1 ."
         ". vot1 ."
+        ". gerr ."
         ". vid2 ."
         ". vot2 ."
         ". vsub ."
@@ -162,28 +165,94 @@ form {
         ". . .";
 }
 
+.gigaErrorMessageBoxRoot {
+    grid-area: gerr;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.gigaErrorMessageBoxRoot > div {
+    position: relative;
+}
+
+.floatingGigaErrorMessageBox {
+    --width: 100vw;
+    --height: 120px;
+
+    position: absolute;
+    width: var(--width);
+    height: var(--height);
+    left: calc(var(--width) / -2);
+    top: calc(var(--height) / -2);
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+
+    background-color: #222d34af;
+}
+
+#gigaErrorMessage {
+    font-family: var(--font);
+    font-size: 30px;
+    text-align: center;
+    max-width: 700px;
+
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+
+@media (max-width: 750px) { 
+    #gigaErrorMessage {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 550px) { 
+    #gigaErrorMessage {
+        font-size: 22px;
+    }
+}
+
+
+.makingRoomForTheBigErrorMessage {
+    opacity: 0.5;
+}
+
+
 @media (min-width: 950px) { 
     .contentWrapper {
-        grid-template-columns: 1fr minmax(300px, 560px) 0px minmax(300px, 560px) 1fr;
+        grid-template-columns: 1fr minmax(300px, 560px) 2px minmax(300px, 560px) 1fr;
         grid-template-rows: 1fr 55px max-content 55px 55px minmax(25px, min-content) max-content 1fr;
         column-gap: 22px;
         grid-template-areas: 
         ". .    .    .    ."
         ". head head head ."
-        ". vid1 .    vid2 ."
-        ". vot1 .    vot2 ."
+        ". vid1 gerr vid2 ."
+        ". vot1 gerr vot2 ."
         ". vsub vsub vsub ."
         ". errm errm errm ."
         ". guid guid guid ."
         ". .    .    .    .";
     }
+
+    .floatingGigaErrorMessageBox {
+        --width: 800px;
+        left: calc(var(--width) / -2);
+        top: calc(var(--height) / -2);
+
+        background-color: inherit;
+    }
+
+    .makingRoomForTheBigErrorMessage {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
-
-.gigaErrorMessageBox {
-    grid-area: berr;
-}
-
+/*
 .leftPaddingBox {
     grid-area: lpad;
 }
@@ -199,6 +268,10 @@ form {
 .bottomPaddingBox {
     grid-area: bpad;
 }
+*/
+
+
+
 
 
 .contentHeader {
