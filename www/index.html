@@ -50,7 +50,7 @@
         </div>
         <div class="gigaErrorMessageBoxRoot">
             <div>
-                <div class="floatingGigaErrorMessageBox"><p id="gigaErrorMessage"></p></div>
+                <div class="floatingGigaErrorMessageBox hidden" id="gigaErrorMessageBox"><p id="gigaErrorMessage"></p></div>
             </div>
         </div>
         <p class="errorMessageBox" id="errorElement"></p>
@@ -236,6 +236,11 @@
             document.getElementById('uiBox5').classList.add('makingRoomForTheBigErrorMessage');
 
             gigaErrorMessage.innerHTML = message;
+            document.getElementById('gigaErrorMessageBox').classList.remove("hidden");
+
+            // giga error should lock the website. Any event that causes this function to be called also does this, but for reassurance
+            toggleVoteButtons(false);
+            toggleSubmitVoteButton(false);
         }
 
         function removeCurrentEmbeds() {
