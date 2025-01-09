@@ -33,7 +33,7 @@ type Database struct{ *sql.DB }
 func (db *Database) setup() (err error) {
 	var setupQueries = []string{
 		// TODO ? video: title, uploader, docSubmitter, upload date
-		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE)",
+		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE, uploader_username TEXT)",
 		"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, ip TEXT UNIQUE)",
 
 		// TODO constraint for (user, video) pairs
