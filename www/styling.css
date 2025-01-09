@@ -109,6 +109,10 @@ button {
     transition: 0.15s;
 }
 
+button:enabled {
+    cursor: pointer;
+}
+
 iframe {
     border: none;
     transition: 0.15s;
