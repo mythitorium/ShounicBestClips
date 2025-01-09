@@ -184,7 +184,7 @@
             //frame1.classList.add("parentRespectingVideoEmbed");
             frame1.width = rect['width'];
             frame1.height = rect['height'];
-            frame1.src = url_a;
+            frame1.src = "https://www.youtube.com/embed/" + url_a;
             clipBox1.appendChild(frame1);
             
             const frame2 = document.createElement('iframe');
@@ -192,7 +192,7 @@
             //frame2.classList.add("parentRespectingVideoEmbed");
             frame2.width = rect['width'];
             frame2.height = rect['height'];
-            frame2.src = url_b;
+            frame2.src = "https://www.youtube.com/embed/" + url_b;
             clipBox2.appendChild(frame2);
 
             left_url = url_a;
