@@ -51,9 +51,11 @@ def import_stuff():
 
 def extract_id_from_url(url):
     split = url.split("/")
-    id = split[-1].split('&')[0].split('?si=')[0].split('?t=')[0].split('?feature=shared')[0]
-    if 'watch?v=' in url:
-        id = id[8:]
+    id = split[-1]
+    if not 'clip' in url:
+        id = split[-1].split('&')[0].split('?si=')[0].split('?t=')[0].split('?feature=shared')[0]
+        if 'watch?v=' in url:
+            id = id[8:]
     
     return id
 
@@ -157,7 +159,7 @@ def resolver(bad_rows):
             print('Raw submission data:')
             print(f'     {' | '.join(row)}')
             print('')
-            print('Manually input new valid in the format of "<username> <new url>"')
+            print('Manually input new valid in the format of "<username>|<new url>"')
 
             action = input(f"CSP Resolver | Row {count} >> ")
 
@@ -170,23 +172,22 @@ def resolver(bad_rows):
                 print('exiting...\n')
                 return bad_rows
             
-            split = action.split(' ')
+            split = action.split('|')
 
             if not len(split) == 2:
-                print('Invalid input. Must be "<username> <new url>"')
+                print('\nInvalid input. Must be "<username>|<new url>"')
+                print("-----")
                 continue
 
-            row = ['', split[0].strip(), '', split[1].strip()]
-            result = validate_row(row, 'fail')
+            new_row = ['', split[0].strip(), '', split[1].strip()]
+            #result = validate_row(new_row, 'fail')
 
-            if result == None:
-                cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES (?, ?)", (extract_id_from_url(row[3]), row[1]))
-                #cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{extract_id_from_url(split[1].strip())}', '{split[0].strip().replace("'", "''")}')")
-                con.commit()
-                print("Valid data accepted. Successfully added to 'output.db'")
-                break
-            else:
-                print(result)
+            cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES (?, ?)", (extract_id_from_url(new_row[3]), new_row[1]))
+            #cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{extract_id_from_url(split[1].strip())}', '{split[0].strip().replace("'", "''")}')")
+            con.commit()
+            print("\nValid data accepted. Successfully added to 'output.db'")
+            print("-----")
+            break
     
     return new_bad_rows
 
@@ -196,7 +197,7 @@ def db_to_txt():
     con = sqlite3.connect("output.db")
     cur = con.cursor()
 
-    res = cur.execute(f"SELECT url FROM videos")
+    res = cur.execute(f"SELECT url FROM videos ORDER BY id")
 
     with open('id_dump.txt', 'w') as file:
         for row in res:
