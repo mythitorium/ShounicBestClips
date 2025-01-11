@@ -196,8 +196,8 @@ def main():
     print('Commands:')
     print('  import')
     print('  export')
-    print('  listready')
-    print('  listfailed')
+    print('  listgood')
+    print('  listbad')
     print('  startresolver : Iterate over and resolve submissions which failed auto-validation')
     print('  exit')
     print('')
@@ -207,8 +207,8 @@ def main():
         match action:
             case 'import': (imported_pairs, bad_rows) = import_stuff()
             case 'export': export_stuff(imported_pairs)
-            case 'listready': list_good_rows(imported_pairs)
-            case 'listfailed': list_bad_rows(bad_rows)
+            case 'listgood': list_good_rows(imported_pairs)
+            case 'listbad': list_bad_rows(bad_rows)
             case 'startresolver' : bad_rows = resolver(bad_rows)
             case 'exit': break
             case _: print('\nCommand is le invalid\n')
