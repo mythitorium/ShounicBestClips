@@ -12,12 +12,19 @@ var envDBFile = getEnvOrDefault("CLIPS_DB", "votes.db?_mutex=full&_journal_mode=
 var envBindAddr = getEnvOrDefault("CLIPS_BIND", ":8081")
 var envBehindProxy = os.Getenv("CLIPS_BEHIND_PROXY")
 
+// Provided by build flags
+var commitSHA string
+
 // TODO: Make this less stupid -myth
 // NOTE: THIS WILL BE TIMEZONE SENSITIVE!!!!!!!!!!
 var votingDeadlineUnix int64 = 1736496000
 
 func main() {
 	var err error
+
+	if commitSHA != "" {
+		fmt.Printf("Starting buildSHA: %s\n", commitSHA[:7])
+	}
 
 	fmt.Printf("Loading database %s\n", envDBFile)
 	database, err = LoadDatabase(envDBFile)
