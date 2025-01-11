@@ -200,6 +200,7 @@
         }
 
         function displayError(code, message) {
+            console.log(code + "," + message)
             if (!(code === 200)) {
                 // Prepare the message
                 let messageToUse = message;
@@ -210,7 +211,7 @@
                     messageToUse = "You've submitted a vote for every single clip. There is nothing left for you to vote on."
                 // Internal error code -1 : Deadline has passed error 
                 } else if (code === -1) {
-                    messageTouse = "The voting deadline has been reached, and voting has closed.";
+                    messageToUse = "The voting deadline has been reached, and voting has closed.";
                 }
 
                 let errorToUse = `Error ${code}; `;
