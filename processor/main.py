@@ -51,7 +51,7 @@ def import_stuff():
 
 def extract_id_from_url(url):
     split = url.split("/")
-    id = split[-1].split('&')[0]
+    id = split[-1].split('&')[0].split('?si=')[0].split('?t=')[0].split('?feature=shared')[0]
     if 'watch?v=' in url:
         id = id[8:]
     
@@ -99,9 +99,11 @@ def export_stuff(imported_pairs):
     con = sqlite3.connect("output.db")
     cur = con.cursor()
 
-    for (id, name) in imported_pairs: 
+    #for (id, name) in imported_pairs: 
+        #pass
         #print(f'{id}, {name}')      
-        cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{id}', '{name.replace("'", "''")}')")
+    cur.executemany(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES (?, ?)", imported_pairs)
+        #cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{id}', '{name.replace("'", "''")}')")
     
     con.commit()
     print('Export completed\n')
@@ -144,17 +146,18 @@ def resolver(bad_rows):
     print('The resolver will iterate through all failed submissions and request valid information.')
     print('This fixed data will directly exported to the output database.\n')
     print("Enter 'skip' to skip a submission, 'exit' to exit the loop.")
+    print('')
 
 
     for (row, reason, count) in bad_rows:
 
         while True:
-            print('\n')
+            print('')
             print(reason)
             print('Raw submission data:')
             print(f'     {' | '.join(row)}')
             print('')
-            print('Manually input new valid in the format of "<username>, <new url>"')
+            print('Manually input new valid in the format of "<username> <new url>"')
 
             action = input(f"CSP Resolver | Row {count} >> ")
 
@@ -167,16 +170,18 @@ def resolver(bad_rows):
                 print('exiting...\n')
                 return bad_rows
             
-            split = action.split(',')
+            split = action.split(' ')
 
             if not len(split) == 2:
-                print('Invalid input. Must be "<username>, <new url>"')
+                print('Invalid input. Must be "<username> <new url>"')
+                continue
 
             row = ['', split[0].strip(), '', split[1].strip()]
             result = validate_row(row, 'fail')
 
             if result == None:
-                cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{extract_id_from_url(split[1].strip())}', '{split[0].strip().replace("'", "''")}')")
+                cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES (?, ?)", (extract_id_from_url(row[3]), row[1]))
+                #cur.execute(f"INSERT OR IGNORE INTO videos (url, uploader_username) VALUES ('{extract_id_from_url(split[1].strip())}', '{split[0].strip().replace("'", "''")}')")
                 con.commit()
                 print("Valid data accepted. Successfully added to 'output.db'")
                 break
@@ -184,6 +189,22 @@ def resolver(bad_rows):
                 print(result)
     
     return new_bad_rows
+
+
+
+def db_to_txt():
+    con = sqlite3.connect("output.db")
+    cur = con.cursor()
+
+    res = cur.execute(f"SELECT url FROM videos")
+
+    with open('id_dump.txt', 'w') as file:
+        for row in res:
+            file.write(row[0] + '\n')
+
+    print('\ndumped\n')
+
+
 
 
 def main():
@@ -198,7 +219,8 @@ def main():
     print('  export')
     print('  listgood')
     print('  listbad')
-    print('  startresolver : Iterate over and resolve submissions which failed auto-validation')
+    print('  resolver : Iterate over and resolve submissions which failed auto-validation')
+    print('  db2txt : Takes everything in the database and dumps them into a text file')
     print('  exit')
     print('')
     while True:
@@ -209,7 +231,8 @@ def main():
             case 'export': export_stuff(imported_pairs)
             case 'listgood': list_good_rows(imported_pairs)
             case 'listbad': list_bad_rows(bad_rows)
-            case 'startresolver' : bad_rows = resolver(bad_rows)
+            case 'resolver' : bad_rows = resolver(bad_rows)
+            case 'db2txt' : db_to_txt()
             case 'exit': break
             case _: print('\nCommand is le invalid\n')
 
