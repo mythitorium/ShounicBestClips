@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/getsentry/sentry-go"
 )
 
 var database *Database
@@ -25,6 +28,16 @@ func main() {
 	if commitSHA != "" {
 		fmt.Printf("Starting buildSHA: %s\n", commitSHA[:7])
 	}
+
+	err = sentry.Init(sentry.ClientOptions{
+		Release:       commitSHA,
+		SampleRate:    0.1,
+		EnableTracing: true,
+	})
+	if err != nil {
+		fmt.Printf("sentry.Init: %s\n", err)
+	}
+	defer sentry.Flush(2 * time.Second)
 
 	fmt.Printf("Loading database %s\n", envDBFile)
 	database, err = LoadDatabase(envDBFile)
