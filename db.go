@@ -50,10 +50,10 @@ func (db *Database) setup() (err error) {
 		// TEST
 		// Now with family guy clips so the test stuff is usable
 		"INSERT OR IGNORE INTO videos (url) VALUES " +
-			"('oxEUk5c1iGU')," +
-			"('TFNYbCGCIaw')," +
+			"('bAK0-WCjwiQ?si=jIJPZMtG6QF8i8k9')," +
+			"('7OXGCi1sgkI')," +
 			"('N0qzSv9c0IY')," +
-			"('sZN5yJqDaYI')," +
+			"('rPle3Y4FLEg?si=OFcIVH1WbUcz5b5j')," +
 			"('TQllQlElpz8')," +
 			"('WRRC-Iw_OPg')," +
 			"('72eGw4H2Ka8')," +
