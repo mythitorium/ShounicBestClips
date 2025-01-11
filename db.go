@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -110,6 +111,12 @@ func (db *Database) GetUser(remoteAddr string) (user User, err error) {
 		err = row.Scan(&user.id)
 		return
 	}
+
+	sentry.AddBreadcrumb(&sentry.Breadcrumb{
+		Type:     "debug",
+		Category: "users",
+		Message:  "Adding new user",
+	})
 
 	// Add user if they do not already exist.
 	row2, err := db.Query(
