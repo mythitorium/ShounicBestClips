@@ -52,9 +52,9 @@ func (db *Database) setup() (err error) {
 		"INSERT OR IGNORE INTO videos (url) VALUES " +
 			"('bAK0-WCjwiQ?si=jIJPZMtG6QF8i8k9')," +
 			"('7OXGCi1sgkI')," +
-			"('N0qzSv9c0IY')," +
+			"('OjHOAfHokqk?si=7HZ2r-UvP5wxtWDy&amp;clip=UgkxhE5qzHs_XWtmAYDJ2QF8YTMnMG6DesNq&amp;clipt=EMf5FRjP5xc')," +
 			"('rPle3Y4FLEg?si=OFcIVH1WbUcz5b5j')," +
-			"('TQllQlElpz8')," +
+			"('OjHOAfHokqk?si=I9gYK1eXCnd0pkmF')," +
 			"('WRRC-Iw_OPg')," +
 			"('72eGw4H2Ka8')," +
 			"('4LilrtDfLP0')," +
@@ -63,14 +63,13 @@ func (db *Database) setup() (err error) {
 			"('lNfCvZl3sKw')," +
 			"('nz_BY7X44kc')," +
 			"('xrziHnudx3g')," +
-			"('2WNrx2jq184')," +
-			"('el0jsvcOSTg')," +
 			"('4hpbK7V146A')," +
 			"('Ta_-UPND0_M')," +
 			"('JgJUbmGDc6k')," +
 			"('ttArr90NvWo')," +
 			"('mIpnpYsl-VY')," +
 			"('4LilrtDfLP0')," +
+			"('duAGuYeF7zY')," +
 			"('0pnwE_Oy5WI')",
 	}
 
