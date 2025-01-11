@@ -218,7 +218,7 @@
 
                 // Error codes where the message will get be giga, ie needs to be big so users will SEE them
                 // All errors below 0 are internal client-side only error codes
-                if (code < 0 || code === 204) {
+                if (code === 420 || code === 204) {
                     displayGigaError(messageToUse);
                 // Everything else will be treated as normal
                 } else {
@@ -318,7 +318,7 @@
                     clearInterval(updateTimeFunc);
                     toggleVoteButtons(false);
                     toggleSubmitVoteButton(false);
-                    displayError(-1, "")
+                    displayError(420, "")
                     countdownTracker.innerHTML = "Voting has ended!";
                 }
             } else {
