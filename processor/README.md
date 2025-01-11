@@ -1,7 +1,7 @@
-Clip Submissions Processor
+Myth's Epic Clip Submissions Processor
 ===
 
-This is a python script that processes clip submissions (.csv) and imports them into and outputs a sqlite database (.db)
+This is a python script that processes clip submissions (.csv) and outputs a sqlite database (.db)
 
 It:
 - Ensures submitted links are valid youtube urls
