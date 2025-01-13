@@ -34,7 +34,7 @@ type Database struct{ *sql.DB }
 func (db *Database) setup() (err error) {
 	var setupQueries = []string{
 		// TODO ? video: title, uploader, docSubmitter, upload date
-		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE)",
+		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE, uploader_username TEXT)",
 		"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, ip TEXT UNIQUE)",
 		"CREATE TABLE IF NOT EXISTS culled_videos (url TEXT UNIQUE)", // TODO should be using Ids
 
@@ -51,29 +51,28 @@ func (db *Database) setup() (err error) {
 
 		// TEST
 		// Now with family guy clips so the test stuff is usable
-		"INSERT OR IGNORE INTO videos (url) VALUES " +
-			"('https://www.youtube.com/embed/oxEUk5c1iGU')," +
-			"('https://www.youtube.com/embed/TFNYbCGCIaw')," +
-			"('https://www.youtube.com/embed/N0qzSv9c0IY')," +
-			"('https://www.youtube.com/embed/sZN5yJqDaYI')," +
-			"('https://www.youtube.com/embed/TQllQlElpz8')," +
-			"('https://www.youtube.com/embed/WRRC-Iw_OPg')," +
-			"('https://www.youtube.com/embed/72eGw4H2Ka8')," +
-			"('https://www.youtube.com/embed/4LilrtDfLP0')," +
-			"('https://www.youtube.com/embed/uSlB4eznXoA')," +
-			"('https://www.youtube.com/embed/i9bYnBb42oY')," +
-			"('https://www.youtube.com/embed/lNfCvZl3sKw')," +
-			"('https://www.youtube.com/embed/nz_BY7X44kc')," +
-			"('https://www.youtube.com/embed/xrziHnudx3g')," +
-			"('https://www.youtube.com/embed/2WNrx2jq184')," +
-			"('https://www.youtube.com/embed/el0jsvcOSTg')," +
-			"('https://www.youtube.com/embed/4hpbK7V146A')," +
-			"('https://www.youtube.com/embed/Ta_-UPND0_M')," +
-			"('https://www.youtube.com/embed/JgJUbmGDc6k')," +
-			"('https://www.youtube.com/embed/ttArr90NvWo')," +
-			"('https://www.youtube.com/embed/mIpnpYsl-VY')," +
-			"('https://www.youtube.com/embed/4LilrtDfLP0')," +
-			"('https://www.youtube.com/embed/0pnwE_Oy5WI')",
+		//"INSERT OR IGNORE INTO videos (url) VALUES " +
+		//	"('bAK0-WCjwiQ?si=jIJPZMtG6QF8i8k9')," +
+		//	"('7OXGCi1sgkI')," +
+		//	"('OjHOAfHokqk?si=7HZ2r-UvP5wxtWDy&amp;clip=UgkxhE5qzHs_XWtmAYDJ2QF8YTMnMG6DesNq&amp;clipt=EMf5FRjP5xc')," +
+		//	"('rPle3Y4FLEg?si=OFcIVH1WbUcz5b5j')," +
+		//	"('OjHOAfHokqk?si=I9gYK1eXCnd0pkmF')," +
+		//	"('WRRC-Iw_OPg')," +
+		//	"('72eGw4H2Ka8')," +
+		//	"('4LilrtDfLP0')," +
+		//	"('uSlB4eznXoA')," +
+		//	"('i9bYnBb42oY')," +
+		//	"('lNfCvZl3sKw')," +
+		//	"('nz_BY7X44kc')," +
+		//	"('xrziHnudx3g')," +
+		//	"('4hpbK7V146A')," +
+		//	"('Ta_-UPND0_M')," +
+		//	"('JgJUbmGDc6k')," +
+		//	"('ttArr90NvWo')," +
+		//	"('mIpnpYsl-VY')," +
+		//	"('4LilrtDfLP0')," +
+		//	"('duAGuYeF7zY')," +
+		//	"('0pnwE_Oy5WI')",
 	}
 
 	// Transaction so we can undo if we error

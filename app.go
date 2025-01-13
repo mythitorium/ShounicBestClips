@@ -20,7 +20,7 @@ var commitSHA string
 
 // TODO: Make this less stupid -myth
 // NOTE: THIS WILL BE TIMEZONE SENSITIVE!!!!!!!!!!
-var votingDeadlineUnix int64 = 1736496000
+var votingDeadlineUnix int64 = 1739271194
 
 func main() {
 	var err error

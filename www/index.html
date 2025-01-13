@@ -184,7 +184,7 @@
             //frame1.classList.add("parentRespectingVideoEmbed");
             frame1.width = rect['width'];
             frame1.height = rect['height'];
-            frame1.src = url_a;
+            frame1.src = "https://www.youtube.com/embed/" + url_a;
             clipBox1.appendChild(frame1);
             
             const frame2 = document.createElement('iframe');
@@ -192,7 +192,7 @@
             //frame2.classList.add("parentRespectingVideoEmbed");
             frame2.width = rect['width'];
             frame2.height = rect['height'];
-            frame2.src = url_b;
+            frame2.src = "https://www.youtube.com/embed/" + url_b;
             clipBox2.appendChild(frame2);
 
             left_url = url_a;
@@ -200,6 +200,7 @@
         }
 
         function displayError(code, message) {
+            console.log(code + "," + message)
             if (!(code === 200)) {
                 // Prepare the message
                 let messageToUse = message;
@@ -210,14 +211,14 @@
                     messageToUse = "You've submitted a vote for every single clip. There is nothing left for you to vote on."
                 // Internal error code -1 : Deadline has passed error 
                 } else if (code === -1) {
-                    messageTouse = "The voting deadline has been reached, and voting has closed.";
+                    messageToUse = "The voting deadline has been reached, and voting has closed.";
                 }
 
                 let errorToUse = `Error ${code}; `;
 
                 // Error codes where the message will get be giga, ie needs to be big so users will SEE them
                 // All errors below 0 are internal client-side only error codes
-                if (code < 0 || code === 204) {
+                if (code === 420 || code === 204) {
                     displayGigaError(messageToUse);
                 // Everything else will be treated as normal
                 } else {
@@ -317,7 +318,7 @@
                     clearInterval(updateTimeFunc);
                     toggleVoteButtons(false);
                     toggleSubmitVoteButton(false);
-                    displayError(-1, "")
+                    displayError(420, "")
                     countdownTracker.innerHTML = "Voting has ended!";
                 }
             } else {

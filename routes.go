@@ -50,6 +50,12 @@ func routeNextVote(w http.ResponseWriter, req *CustomRequest, user User) {
 		return
 	}
 
+	if time.Now().Unix() > votingDeadlineUnix {
+		w.WriteHeader(420)
+		w.Write([]byte("Deadline passed"))
+		return
+	}
+
 	// Send new vote to client
 	bytes, err := json.Marshal(options)
 	if err != nil {
