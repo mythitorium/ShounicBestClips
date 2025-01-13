@@ -49,6 +49,8 @@ func main() {
 	serveMux := CustomMux{http.NewServeMux()}
 	initRoutes(serveMux)
 
+	go taskCullVideos()
+
 	fmt.Printf("Starting http server on %s\n", envBindAddr)
 	if err = http.ListenAndServe(envBindAddr, serveMux); err != nil {
 		panic(err)
