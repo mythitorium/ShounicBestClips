@@ -11,14 +11,14 @@ const minCullVotes = 20
 const minCullRatio = .30
 const intervalCullTask = 1 * time.Hour
 
-type voteState = map[string]*CullVotes
+type VoteState = map[string]*VideoStats
 
-type CullVotes struct {
+type VideoStats struct {
 	totalVotes int
 	totalScore int
 }
 
-func (cv *CullVotes) ShouldCull() bool {
+func (cv *VideoStats) ShouldCull() bool {
 	return cv.totalVotes > minCullVotes &&
 		float32(cv.totalScore)/float32(cv.totalVotes) < minCullRatio
 }
@@ -43,7 +43,7 @@ func cullVideos(database *Database) error {
 		return err
 	}
 
-	videos := make(voteState)
+	videos := make(VoteState)
 
 	// Populate map
 	rows, err := tx.Query("SELECT url FROM videos")
@@ -58,7 +58,7 @@ func cullVideos(database *Database) error {
 			return err
 		}
 
-		videos[url] = &CullVotes{}
+		videos[url] = &VideoStats{}
 	}
 
 	err = rows.Close()
@@ -89,15 +89,31 @@ func cullVideos(database *Database) error {
 		return err
 	}
 
+	// Reset table to allow videos to return to the queue
+	// if we adjust the numbers in prod to be more lenient.
+	_, err = tx.Exec("DELETE FROM culled_videos")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	fmt.Println("Culling Debug:\n\tUrl Votes Score")
-	for url, votes := range videos {
-		fmt.Printf("\t%s %v\n", url, votes)
-		if votes.ShouldCull() {
+	for url, stats := range videos {
+		fmt.Printf("\t%s %v ", url, stats)
+		fmt.Printf(
+			"(%d/%d) = %f > %f\n",
+			stats.totalScore,
+			stats.totalVotes,
+			float32(stats.totalScore)/float32(stats.totalVotes),
+			minCullRatio,
+		)
+		if stats.ShouldCull() {
 			_, err = tx.Exec(
 				"INSERT OR IGNORE INTO culled_videos VALUES (?)",
 				url,
 			)
 			if err != nil {
+				tx.Rollback()
 				return err
 			}
 		}
