@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -35,6 +36,7 @@ func (db *Database) setup() (err error) {
 		// TODO ? video: title, uploader, docSubmitter, upload date
 		"CREATE TABLE IF NOT EXISTS videos (id INTEGER PRIMARY KEY, url TEXT UNIQUE, uploader_username TEXT)",
 		"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, ip TEXT UNIQUE)",
+		"CREATE TABLE IF NOT EXISTS culled_videos (url TEXT UNIQUE)", // TODO should be using Ids
 
 		// TODO constraint for (user, video) pairs
 		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL)",
@@ -110,6 +112,12 @@ func (db *Database) GetUser(remoteAddr string) (user User, err error) {
 		return
 	}
 
+	sentry.AddBreadcrumb(&sentry.Breadcrumb{
+		Type:     "debug",
+		Category: "users",
+		Message:  "Adding new user",
+	})
+
 	// Add user if they do not already exist.
 	row2, err := db.Query(
 		"INSERT INTO users(ip) VALUES (?) RETURNING id",
@@ -159,7 +167,10 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 // Empty a or b strings means not enough available voting options
 func (db *Database) findNextPair(user User) (a string, b string, err error) {
 	row, err := db.Query(
-		"SELECT url FROM videos WHERE url NOT IN (SELECT video_url FROM votes WHERE user_id = ?) ORDER BY random() LIMIT 2",
+		"SELECT url FROM videos "+
+			"WHERE url NOT IN (SELECT video_url FROM votes WHERE user_id = ?) "+
+			"AND   url NOT IN (SELECT url FROM culled_videos) "+
+			"ORDER BY random() LIMIT 2",
 		user.id,
 	)
 	if err != nil {

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
+
+	"github.com/getsentry/sentry-go"
 )
 
 type CustomMux struct{ *http.ServeMux }
@@ -14,17 +17,25 @@ type UserRouteFunc func(http.ResponseWriter, *CustomRequest, User)
 // Basic HTTP route with logging
 func (mux *CustomMux) NewRoute(pattern string, handler RouteFunc) {
 	mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
+		sentry.ConfigureScope(func(scope *sentry.Scope) {
+			scope.SetContext("MuxConfig", sentry.Context{
+				"Proxy": envBehindProxy,
+			})
+		})
+
 		cw := &CustomResponseWriter{w, 200}
 		cr := &CustomRequest{r, ""}
 
 		if cr.GetRealIP() == "" {
-			fmt.Printf(
+			msg := fmt.Sprintf(
 				"Empty IP? cf-=%s x-real=%s remoteAddr=%s",
 				r.Header.Get("CF-Connecting-IP"),
 				r.Header.Get("X-Real-Ip"),
 				r.RemoteAddr,
 			)
-			// TODO log to sentry
+			fmt.Println(msg)
+			sentry.CaptureMessage(msg)
+
 			cw.WriteHeader(511)
 			cw.Write([]byte("Empty IP? Try again, if this is persistent, contact @Gamecube762"))
 			return
@@ -52,6 +63,12 @@ func (mux *CustomMux) NewUserRoute(pattern string, handler UserRouteFunc) {
 		if err != nil {
 			return
 		}
+
+		sentry.ConfigureScope(func(scope *sentry.Scope) {
+			scope.SetUser(sentry.User{
+				ID: strconv.FormatUint(uint64(user.id), 10),
+			})
+		})
 
 		handler(w, r, user)
 	})
