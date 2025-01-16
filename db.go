@@ -39,7 +39,7 @@ func (db *Database) setup() (err error) {
 		"CREATE TABLE IF NOT EXISTS culled_videos (url TEXT UNIQUE)", // TODO should be using Ids
 
 		// TODO constraint for (user, video) pairs
-		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL)",
+		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL, vote_time INTEGER NOT NULL)",
 		// "CREATE UNIQUE IF NOT EXISTS INDEX idx_votes_user_video ON votes(user_id, video_url)",
 
 		"CREATE TABLE IF NOT EXISTS active_votes ( " +
@@ -156,7 +156,7 @@ func (db *Database) GetNextVoteForUser(user User) (vote *VoteOptions, err error)
 	_, err = db.Exec(
 		"INSERT OR REPLACE INTO active_votes VALUES (?, ?, ?, ?)",
 		user.id,
-		time.Now().UnixMilli(),
+		time.Now().Unix(),
 		a,
 		b,
 	)
@@ -229,10 +229,10 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO scale min time to video length
 	// 	?	minTime := max(min(a.length, b.length) / 2, 90 * time.seconds)
-	// if vote.startTime.Add(30 * time.Second).After(time.Now()) {
-	// 	// User voting too fast, ignore vote
-	// 	return fmt.Errorf("too fast")
-	// }
+	if vote.startTime.Add(voteCooldown * time.Second).After(time.Now()) {
+		// User voting too fast, ignore vote
+		return fmt.Errorf("too fast")
+	}
 
 	// TODO limit max time? 12hours?
 
@@ -250,12 +250,14 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	// TODO only supports one round of votes
 	_, err = db.Exec(
 		"DELETE FROM active_votes WHERE user_id = ?;"+
-			"INSERT INTO votes VALUES (?, ?, 1), (?, ?, 0);",
+			"INSERT INTO votes VALUES (?, ?, 1, ?), (?, ?, 0, ?);",
 		user.id,
 		user.id,
 		choice,
+		time.Now().UnixMilli(),
 		user.id,
 		other,
+		time.Now().UnixMilli(),
 	)
 	return
 }
@@ -292,6 +294,27 @@ func (db *Database) TallyVotes() (count map[string]int, err error) {
 			return
 		}
 		count[url] += score
+	}
+
+	return
+}
+
+func (db *Database) GetTotalClips() (totalClips int64) {
+	row, err := db.Query("SELECT COUNT() as totalClips FROM videos")
+	if err != nil {
+		return 0
+	}
+	defer row.Close()
+
+	if !row.Next() {
+		// 0 videos available
+		return
+	}
+
+	err = row.Scan(&totalClips)
+
+	if err != nil {
+		return 0
 	}
 
 	return
