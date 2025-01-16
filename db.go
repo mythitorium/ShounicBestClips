@@ -218,10 +218,10 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO scale min time to video length
 	// 	?	minTime := max(min(a.length, b.length) / 2, 90 * time.seconds)
-	// if vote.startTime.Add(30 * time.Second).After(time.Now()) {
-	// 	// User voting too fast, ignore vote
-	// 	return fmt.Errorf("too fast")
-	// }
+	if vote.startTime.Add(5 * time.Second).After(time.Now()) {
+		// User voting too fast, ignore vote
+		return fmt.Errorf("too fast")
+	}
 
 	// TODO limit max time? 12hours?
 
