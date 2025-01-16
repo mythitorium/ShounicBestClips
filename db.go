@@ -229,8 +229,6 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 
 	// TODO scale min time to video length
 	// 	?	minTime := max(min(a.length, b.length) / 2, 90 * time.seconds)
-	fmt.Println(vote.startTime.UnixMilli())
-	fmt.Println(time.Now().UnixMilli())
 	if vote.startTime.Add(5 * time.Second).After(time.Now()) {
 		// User voting too fast, ignore vote
 		return fmt.Errorf("too fast")
