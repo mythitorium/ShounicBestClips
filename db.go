@@ -296,3 +296,24 @@ func (db *Database) TallyVotes() (count map[string]int, err error) {
 
 	return
 }
+
+func (db *Database) GetTotalClips() (totalClips int64) {
+	row, err := db.Query("SELECT COUNT() as totalClips FROM videos")
+	if err != nil {
+		return 0
+	}
+	defer row.Close()
+
+	if !row.Next() {
+		// 0 videos available
+		return
+	}
+
+	err = row.Scan(&totalClips)
+
+	if err != nil {
+		return 0
+	}
+
+	return
+}

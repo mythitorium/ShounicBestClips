@@ -20,6 +20,7 @@ var commitSHA string
 
 // var votingDeadlineUnix int64 = 1739271194
 var votingDeadlineUnix int64 = time.Date(2025, time.January, 25, 24, 30, 50, 0, time.UTC).Unix()
+var totalUnculledClipsInDb int64
 
 func main() {
 	var err error
@@ -54,6 +55,8 @@ func main() {
 	if err = http.ListenAndServe(envBindAddr, serveMux); err != nil {
 		panic(err)
 	}
+
+	UpdateUnculledClipTotal()
 }
 
 func getEnvOrDefault(key string, defValue string) (value string) {
@@ -62,4 +65,9 @@ func getEnvOrDefault(key string, defValue string) (value string) {
 		value = defValue
 	}
 	return
+}
+
+func UpdateUnculledClipTotal() {
+	totalUnculledClipsInDb = database.GetTotalClips()
+	fmt.Println("The total number of unculled, servable clips is now", totalUnculledClipsInDb)
 }

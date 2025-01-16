@@ -33,6 +33,8 @@ func taskCullVideos() {
 			sentry.CaptureException(err)
 		}
 
+		UpdateUnculledClipTotal()
+
 		time.Sleep(intervalCullTask)
 	}
 }
