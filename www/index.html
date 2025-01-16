@@ -212,9 +212,14 @@
                 // Internal error code -1 : Deadline has passed error 
                 } else if (code === -1) {
                     messageToUse = "The voting deadline has been reached, and voting has closed.";
+                } else if (code === 460) {
+                    messageToUse = "You're voting too quickly! Slow down!";
                 }
 
                 let errorToUse = `Error ${code}; `;
+                if (code === 460) {
+                    errorToUse = "";
+                }
 
                 // Error codes where the message will get be giga, ie needs to be big so users will SEE them
                 // All errors below 0 are internal client-side only error codes
