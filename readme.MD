@@ -29,5 +29,8 @@ Routes
 }
 ```
 
-If the route returns `204`, then the user has completed all their votes.
-If the route returns `420`, then a predetermined deadline has passed and voting is no longer allowed.
+Unique response codes:
+
+- `204` - The end user has completed all their votes.
+- `420` - A predetermined deadline has passed and voting is no longer allowed.
+- `460` - The end user's vote has been rejected by the vote rate limit system.
