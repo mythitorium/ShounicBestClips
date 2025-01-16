@@ -39,7 +39,7 @@ func (db *Database) setup() (err error) {
 		"CREATE TABLE IF NOT EXISTS culled_videos (url TEXT UNIQUE)", // TODO should be using Ids
 
 		// TODO constraint for (user, video) pairs
-		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL)",
+		"CREATE TABLE IF NOT EXISTS votes (user_id INTEGER NOT NULL, video_url TEXT NOT NULL, score INTEGER NOT NULL, vote_time INTEGER NOT NULL)",
 		// "CREATE UNIQUE IF NOT EXISTS INDEX idx_votes_user_video ON votes(user_id, video_url)",
 
 		"CREATE TABLE IF NOT EXISTS active_votes ( " +
@@ -250,12 +250,14 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	// TODO only supports one round of votes
 	_, err = db.Exec(
 		"DELETE FROM active_votes WHERE user_id = ?;"+
-			"INSERT INTO votes VALUES (?, ?, 1), (?, ?, 0);",
+			"INSERT INTO votes VALUES (?, ?, 1, ?), (?, ?, 0, ?);",
 		user.id,
 		user.id,
 		choice,
+		time.Now().UnixMilli(),
 		user.id,
 		other,
+		time.Now().UnixMilli(),
 	)
 	return
 }
