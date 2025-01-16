@@ -18,9 +18,8 @@ var envBehindProxy = os.Getenv("CLIPS_BEHIND_PROXY")
 // Provided by build flags
 var commitSHA string
 
-// TODO: Make this less stupid -myth
-// NOTE: THIS WILL BE TIMEZONE SENSITIVE!!!!!!!!!!
-var votingDeadlineUnix int64 = 1739271194
+// var votingDeadlineUnix int64 = 1739271194
+var votingDeadlineUnix int64 = time.Date(2025, time.January, 25, 24, 30, 50, 0, time.UTC).Unix()
 
 func main() {
 	var err error
