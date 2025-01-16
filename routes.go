@@ -91,9 +91,14 @@ func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 
 	err := database.SubmitUserVote(user, choice)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Failed to communicate with database."))
-		fmt.Printf("Failed to submit vote from %v of \"%s\": %v\n", user, choice, err)
+		if err.Error() == "too fast" {
+			w.WriteHeader(460)
+			w.Write([]byte("You're voting too fast"))
+		} else {
+			w.WriteHeader(500)
+			w.Write([]byte("Failed to communicate with database."))
+			fmt.Printf("Failed to submit vote from %v of \"%s\": %v\n", user, choice, err)
+		}
 		sentry.CaptureException(err)
 		return
 	}
