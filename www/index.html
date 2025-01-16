@@ -71,6 +71,7 @@
     <script>
         // This is the date & time voting will end
         let countDownDate = -1
+        let reportedClipTotal = 0
 
         // element reference vars
         let clipBox1;
@@ -113,14 +114,18 @@
                 console.log(response);
                 // Format the error message as a successful payload lmfao
                 if (!(response.status === 200)) {
-                    return { deadline: -1 };
+                    return { deadline: -1, clip_total: 0 };
                 }
                 countdownTracker.classList.remove('invis');
                 return response.json();
             }).then((json) => {
                 console.log(json);
-                countDownDate = json['deadline'] * 1000 // Deadline display implimentation is built around a miliseconds timestamp. 
-                                                                // 1000x'ing it to fit is easier.
+                // Deadline display implimentation is built around a miliseconds timestamp. 
+                // 1000x'ing it to fit is easier.
+                countDownDate = json['deadline'] * 1000; 
+
+                reportedClipTotal = json['clip_total'];
+
                 setDeadlineCountdown();
             });
         }
@@ -297,6 +302,14 @@
 
         function setDeadlineCountdown() {
             if (countDownDate > 0) {
+                // Get totals
+                // Dumb place to put this code but it'll work
+                let runningClipTotalString = "";
+                if (!(reportedClipTotal === 0)) {
+                    runningClipTotalString = " &nbsp;&nbsp; - &nbsp;&nbsp;  Total remaining clips: " + reportedClipTotal;
+                }
+
+
                 // Get today's date and time
                 const now = new Date().getTime();
 
@@ -313,9 +326,9 @@
                 // No, they are not.
                 // Arzumify
                 if (days > 0) {
-                    countdownTracker.innerHTML = "Voting ends in " + days + "d " + hours + "h " + minutes + "m";
+                    countdownTracker.innerHTML = "Voting ends in " + days + "d " + hours + "h " + minutes + "m" + runningClipTotalString;
                 } else {
-                    countdownTracker.innerHTML = "Voting ends in " + hours + "h " + minutes + "m";
+                    countdownTracker.innerHTML = "Voting ends in " + hours + "h " + minutes + "m" + runningClipTotalString;
                 }
 
                 // If the countdown is over, write some text
