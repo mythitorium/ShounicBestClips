@@ -109,7 +109,7 @@ func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 }
 
 func routeSendDeadline(w http.ResponseWriter, req *CustomRequest) {
-	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix})
+	bytes, err := json.Marshal(map[string]int64{"deadline": votingDeadlineUnix, "clip_total": totalUnculledClipsInDb})
 
 	if err != nil {
 		w.WriteHeader(500)
