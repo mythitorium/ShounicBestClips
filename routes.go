@@ -7,6 +7,8 @@ import (
 	"io/fs"
 	"net/http"
 	"time"
+
+	"github.com/getsentry/sentry-go"
 )
 
 //go:embed www/*
@@ -36,8 +38,8 @@ func routeNextVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to fetch from database."))
-		// TODO log to Sentry
 		fmt.Printf("Failed to get new votes for user %v \"%s\"\n", user, err)
+		sentry.CaptureException(err)
 		return
 	}
 
@@ -59,8 +61,8 @@ func routeNextVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to write JSON data?"))
-		// TODO log to Sentry
 		fmt.Printf("Failed to write json data %v\n", options)
+		sentry.CaptureException(err)
 		return
 	}
 
@@ -91,8 +93,8 @@ func routeSubmitVote(w http.ResponseWriter, req *CustomRequest, user User) {
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to communicate with database."))
-		// TODO log to Sentry
 		fmt.Printf("Failed to submit vote from %v of \"%s\": %v\n", user, choice, err)
+		sentry.CaptureException(err)
 		return
 	}
 
@@ -108,6 +110,7 @@ func routeSendDeadline(w http.ResponseWriter, req *CustomRequest) {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to prepare deadline."))
 		fmt.Printf("Failed to write json data regarding deadline timestamp")
+		sentry.CaptureException(err)
 		return
 	}
 
@@ -122,6 +125,7 @@ func routeTotals(w http.ResponseWriter, req *CustomRequest) {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to count votes."))
 		fmt.Println(err.Error())
+		sentry.CaptureException(err)
 		return
 	}
 
@@ -130,6 +134,7 @@ func routeTotals(w http.ResponseWriter, req *CustomRequest) {
 		w.WriteHeader(500)
 		w.Write([]byte("Failed to write Json."))
 		fmt.Println(err.Error())
+		sentry.CaptureException(err)
 		return
 	}
 
