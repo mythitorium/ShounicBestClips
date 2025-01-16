@@ -20,6 +20,8 @@ var commitSHA string
 
 // var votingDeadlineUnix int64 = 1739271194
 var votingDeadlineUnix int64 = time.Date(2025, time.January, 25, 24, 30, 50, 0, time.UTC).Unix()
+var voteCooldown time.Duration = 5
+
 var totalUnculledClipsInDb int64
 
 func main() {
