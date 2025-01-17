@@ -8,7 +8,7 @@ import (
 )
 
 const minCullVotes = 20
-const minCullRatio = .30
+const minCullRatio = .40
 const intervalCullTask = 1 * time.Hour
 
 type VoteState = map[string]*VideoStats
