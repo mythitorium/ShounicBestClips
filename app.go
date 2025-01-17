@@ -18,8 +18,10 @@ var envBehindProxy = os.Getenv("CLIPS_BEHIND_PROXY")
 // Provided by build flags
 var commitSHA string
 
-// var votingDeadlineUnix int64 = 1739271194
-var votingDeadlineUnix int64 = time.Date(2025, time.January, 25, 24, 30, 50, 0, time.UTC).Unix()
+var votingDeadlineUnix int64 = 1737953940
+
+// this was a nice thing you made but unfortunately i just want to paste a raw unix timestamp in here lol - sho
+//var votingDeadlineUnix int64 = time.Date(2025, time.January, 25, 24, 30, 50, 0, time.UTC).Unix()
 var voteCooldown time.Duration = 5
 
 var totalUnculledClipsInDb int64
