@@ -243,7 +243,7 @@ func (db *Database) SubmitUserVote(user User, choice string) (err error) {
 	case vote.B:
 		other = vote.A
 	default:
-		fmt.Println("Invalid choice")
+		fmt.Printf("Invalid choice \"%s\"\n", choice)
 		return
 	}
 
