@@ -27,13 +27,16 @@ func taskCullVideos() {
 	var err error
 	for {
 		fmt.Println("Running cull task")
+		start := time.Now()
 
 		if err = cullVideos(database); err != nil {
-			fmt.Print(err.Error())
+			fmt.Println("Failed to cull videos:" + err.Error())
 			sentry.CaptureException(err)
 		}
 
+		fmt.Printf("Cull finish at %dms\n", time.Since(start).Milliseconds())
 		UpdateUnculledClipTotal()
+		fmt.Printf("Counting finish at %dms\n", time.Since(start).Milliseconds())
 
 		time.Sleep(intervalCullTask)
 	}
