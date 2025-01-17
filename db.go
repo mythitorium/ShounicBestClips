@@ -299,8 +299,8 @@ func (db *Database) TallyVotes() (count map[string]int, err error) {
 	return
 }
 
-func (db *Database) GetTotalClips() (totalClips int64) {
-	row, err := db.Query("SELECT COUNT() as totalClips FROM videos")
+func (db *Database) GetTotalClips() (grandTotal int64) {
+	row, err := db.Query("SELECT (SELECT COUNT() FROM videos) as totalClips, (SELECT COUNT() FROM culled_videos) as totalCulled")
 	if err != nil {
 		return 0
 	}
@@ -308,10 +308,13 @@ func (db *Database) GetTotalClips() (totalClips int64) {
 
 	if !row.Next() {
 		// 0 videos available
-		return
+		return 0
 	}
 
-	err = row.Scan(&totalClips)
+	var totalClips int64
+	var totalCulled int64
+	err = row.Scan(&totalClips, &totalCulled)
+	grandTotal = totalClips - totalCulled
 
 	if err != nil {
 		return 0
