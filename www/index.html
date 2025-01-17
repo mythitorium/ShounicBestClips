@@ -17,7 +17,7 @@
 <body>
     <div class="headerWrapper">
         <div></div>
-        <div class="pageTitle"><p class="pageTitleText">Shounic's Best Clips of 2024</p></div>
+        <div class="pageTitle"><p class="pageTitleText">sho's 2024 TF2 clip contest</p></div>
         <!--  <button class="menuButton"><i class="ph ph-info menuBtnIcon"></i><p class="menuBtnText">About</p></button>
         <button class="menuButton"><i class="ph ph-chart-bar-horizontal menuBtnIcon"></i><p class="menuBtnText">Stats</p></button> -->
         <div></div>
@@ -55,18 +55,19 @@
         </div>
         <p class="errorMessageBox" id="errorElement"></p>
         <div class="guideBox" id="guideBox">
-            <p>Epic Guide:</p>
-            <ol>
-                <li>You will be given 2 random user-submitted clips.</li>
-                <li>Use your inner genius to decide which clip is better.</li>
-                <li>Select a video and then click 'Vote.'</li>
-                <li>Your vote will be recorded, and you'll be given 2 new random clips to vote on.</li>
-                <li>The more votes the better!</li>
-            </ol> 
+            <p>FAQ:</p>
+            <p>🟨 what do i do?</p>
+            <p>🟦 of the two clips presented to you, watch them and simply pick the one you like better! repeat this for as much time as you have to help us sort through the massive pile of clips to get to a winner!</p>
+            <br>
+            <p>🟨 how does the voting system work?</p>
+            <p>🟦 for the 2 clips shown to you, it's just randomly picked. for the overall system to narrow down our pile of clips: after some time, the system will automatically remove clips from the pool that have winrates that are too poor, focusing votes on the winners and gathering more data to sort through the good from very good from extremely good. you can tell the system is running when the "current clip pool size" number written at the top changes. please return once in a while when things have shifted around to help us narrow a winner down!</p>
+            <br>
+            <p>🟨 how will the finalists be picked?</p>
+            <p>🟦 to make sure the winners are decided in the fairest way possible, the top 25 (? number may change) clips will be placed into a bracket and directly voted for on a livestream (time/date to be announced), which will ultimately decide which are the top 5 clips of 2024 of tf2 (officially) (objective fact)</p>
         </div>
     </div>
 
-    <p class="footerBox">If you have questions or problems of extreme importance, join the <a href="https://discord.gg/HaYBByX9KM">discord</a>.</p>
+    <p class="footerBox">if something is horrifically broken: <a href="https://discord.gg/HaYBByX9KM">discord</a></p>
 
     <script>
         // This is the date & time voting will end
@@ -131,7 +132,7 @@
                 if (reportedClipTotal === 0) {
                     totalClipsCounter.innerHTML = "";
                 } else {
-                    totalClipsCounter.innerHTML = "Total remaining clips: " + reportedClipTotal;
+                    totalClipsCounter.innerHTML = "current clip pool size: " + reportedClipTotal;
                 }
 
                 setDeadlineCountdown();
