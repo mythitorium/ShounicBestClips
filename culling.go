@@ -51,29 +51,8 @@ func cullVideos(database *Database) error {
 
 	videos := make(VoteState)
 
-	// Populate map
-	rows, err := tx.Query("SELECT url FROM videos")
-	if err != nil {
-		return err
-	}
-
-	for rows.Next() {
-		var url string
-		err = rows.Scan(&url)
-		if err != nil {
-			return err
-		}
-
-		videos[url] = &VideoStats{}
-	}
-
-	err = rows.Close()
-	if err != nil {
-		return err
-	}
-
 	// Count the vote scores and vote counts
-	rows, err = tx.Query("SELECT video_url, score FROM votes")
+	rows, err := tx.Query("SELECT video_url, score FROM votes")
 	if err != nil {
 		return err
 	}
