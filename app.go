@@ -21,7 +21,7 @@ var commitSHA string
 // this makes the front end misreport?
 //var votingDeadlineUnix int64 = 1737953940
 
-var votingDeadlineUnix int64 = time.Date(2025, time.January, 26, 23, 59, 0, 0, time.UTC).Unix()
+var votingDeadlineUnix int64 = time.Date(2025, time.January, 27, 4, 59, 0, 0, time.UTC).Unix()
 var voteCooldown time.Duration = 5
 
 var totalUnculledClipsInDb int64
