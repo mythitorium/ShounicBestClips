@@ -55,8 +55,6 @@ func main() {
 
 	go taskCullVideos()
 
-	UpdateUnculledClipTotal()
-
 	fmt.Printf("Starting http server on %s\n", envBindAddr)
 	if err = http.ListenAndServe(envBindAddr, serveMux); err != nil {
 		panic(err)
