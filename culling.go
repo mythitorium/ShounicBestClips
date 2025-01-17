@@ -82,6 +82,10 @@ func cullVideos(database *Database) error {
 			return err
 		}
 
+		if videos[url] == nil {
+			videos[url] = &VideoStats{}
+		}
+
 		videos[url].totalScore += score
 		videos[url].totalVotes += 1
 	}
