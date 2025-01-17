@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -27,13 +28,16 @@ func taskCullVideos() {
 	var err error
 	for {
 		fmt.Println("Running cull task")
+		start := time.Now()
 
 		if err = cullVideos(database); err != nil {
-			fmt.Print(err.Error())
+			fmt.Println("Failed to cull videos:" + err.Error())
 			sentry.CaptureException(err)
 		}
 
+		fmt.Printf("Cull finish at %dms\n", time.Since(start).Milliseconds())
 		UpdateUnculledClipTotal()
+		fmt.Printf("Counting finish at %dms\n", time.Since(start).Milliseconds())
 
 		time.Sleep(intervalCullTask)
 	}
@@ -47,32 +51,13 @@ func cullVideos(database *Database) error {
 
 	videos := make(VoteState)
 
-	// Populate map
-	rows, err := tx.Query("SELECT url FROM videos")
-	if err != nil {
-		return err
-	}
-
-	for rows.Next() {
-		var url string
-		err = rows.Scan(&url)
-		if err != nil {
-			return err
-		}
-
-		videos[url] = &VideoStats{}
-	}
-
-	err = rows.Close()
-	if err != nil {
-		return err
-	}
-
 	// Count the vote scores and vote counts
-	rows, err = tx.Query("SELECT video_url, score FROM votes")
+	rows, err := tx.Query("SELECT video_url, score FROM votes")
 	if err != nil {
 		return err
 	}
+
+	IsSingleThreaded := runtime.GOMAXPROCS(0) == 1
 
 	for rows.Next() {
 		var url string
@@ -88,6 +73,12 @@ func cullVideos(database *Database) error {
 
 		videos[url].totalScore += score
 		videos[url].totalVotes += 1
+
+		if IsSingleThreaded {
+			// Release the loop to allow
+			// Other goroutines to run.
+			time.Sleep(250 * time.Nanosecond)
+		}
 	}
 
 	err = rows.Close()
