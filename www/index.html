@@ -199,6 +199,8 @@
             frame1.width = rect['width'];
             frame1.height = rect['height'];
             frame1.src = "https://www.youtube.com/embed/" + url_a;
+            frame1.setAttribute("allowfullscreen", "");
+            frame1.setAttribute("allow", "autoplay; allowfullscreen");
             clipBox1.appendChild(frame1);
             
             const frame2 = document.createElement('iframe');
@@ -207,6 +209,8 @@
             frame2.width = rect['width'];
             frame2.height = rect['height'];
             frame2.src = "https://www.youtube.com/embed/" + url_b;
+            frame2.setAttribute("allowfullscreen", "");
+            frame2.setAttribute("allow", "autoplay; allowfullscreen");
             clipBox2.appendChild(frame2);
 
             left_url = url_a;
