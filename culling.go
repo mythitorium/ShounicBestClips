@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -57,7 +56,7 @@ func cullVideos(database *Database) error {
 		return err
 	}
 
-	IsSingleThreaded := runtime.GOMAXPROCS(0) == 1
+	// IsSingleThreaded := runtime.GOMAXPROCS(0) == 1
 
 	for rows.Next() {
 		var url string
