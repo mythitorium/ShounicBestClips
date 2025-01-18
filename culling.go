@@ -74,11 +74,11 @@ func cullVideos(database *Database) error {
 		videos[url].totalScore += score
 		videos[url].totalVotes += 1
 
-		if IsSingleThreaded {
-			// Release the loop to allow
-			// Other goroutines to run.
-			time.Sleep(250 * time.Nanosecond)
-		}
+		//if IsSingleThreaded {
+		//	// Release the loop to allow
+		//	// Other goroutines to run.
+		//	time.Sleep(250 * time.Nanosecond)
+		//}
 	}
 
 	err = rows.Close()
