@@ -238,5 +238,146 @@ def main():
             case _: print('\nCommand is le invalid\n')
 
 
+
+
+def voting_distrib(exclude_culled: bool):
+    pass
+
+    clips = {}
+
+    con = sqlite3.connect("live.db")
+    cur = con.cursor()
+
+    # Db query 
+    res = []
+    if exclude_culled:
+        res = cur.execute("""
+            SELECT video_url, score FROM votes WHERE 
+                          video_url NOT IN (SELECT url FROM culled_videos)
+                          AND video_url IN (SELECT url FROM videos)
+        """)
+    else:
+        res = cur.execute('SELECT video_url, score FROM votes WHERE video_url IN (SELECT url FROM videos)')
+    
+    # process rows
+    for row in res:
+        url = row[0]
+        score = row[1]
+        if not url in clips:
+            clips[url] = { "w": 0, "l" : 0 }
+        else:
+            if score == 1:
+                clips[url]["w"] += 1
+            else:
+                clips[url]["l"] += 1
+
+    # Set ratios  
+    for key in clips:
+        clips[key]["ratio"] = ((clips[key]["w"]/(clips[key]["w"]+clips[key]["l"])) * 100)
+
+    # Sort by ratio
+    clips = dict(sorted(clips.items(), key=lambda x:x[1]['ratio']))
+
+    # Print results
+    count = 0
+    additive_total = 0
+    vote_total = 0
+    for key in clips:
+        data = clips[key]
+        wins = data["w"]
+        loss = data["l"]
+        ratio = data['ratio']
+        additive_total += (wins/(wins+loss)) * 100
+        vote_total += wins + loss
+        #print(f'{count} | {key} -- ratio: {(ratio)}% - {wins+loss} votes - {wins} wins & {loss} losses) ')
+        #print(f'{969 - count} | ratio: {ratio}% -- link: <https://youtu.be/{key}>')
+        res = cur.execute(f"""SELECT uploader_username FROM videos WHERE url = '{key}'""")
+        user = ''
+        for row in res:
+            user = row[0]
+        print(f'new Clip("#{952 - count} {user}", "{key}", {round(ratio, 3)}),')
+        count += 1
+    
+    # Print totals
+    if exclude_culled:
+        print('POOL: UNCULLED CLIPS')
+    else:
+        print('POOL: UNCULLED + CULLED CLIPS')
+
+    print(f'AVERAGE WINRATE: {round(additive_total/count)-13}%')
+    print(f'TOTAL VOTES: {vote_total}')
+    print(f'AVERAGE VOTES PER CLIP: {round(vote_total/count)-13}')
+    print(f'total clips in this pool: {count-13}')
+    
+    # Add another number if you want to see data at a different thresh
+    for thresh in [45, 50, 55, 60, 65, 70, 75, 80, 90]:
+        total = 0
+        for key in clips:
+            if clips[key]['ratio'] >= thresh:
+                total += 1
+        
+        print(f'Amount of clips above {thresh}%: {max(0, total-13)}')
+    
+    print('\nNOTE: TOTALS ARE ALL OFFSET BY -13')
+    
+
 if __name__=="__main__":
+    #voting_distrib(False)
+#
+#
+    #items = [
+    #    0,
+    #    83,
+    #    84,
+    #    16,
+    #    99,
+    #    15,
+    #    100,
+    #    8,
+    #    23,
+    #    92,
+    #    76,
+    #    91,
+    #    7,
+    #    3,
+    #    80,
+    #    87,
+    #    19,
+    #    96,
+    #    12,
+    #    11,
+    #    20,
+    #    95,
+    #    78,
+    #    88,
+    #    4,
+    #    1,
+    #    82,
+    #    85,
+    #    17,
+    #    98,
+    #    14,
+    #    101,
+    #    9,
+    #    22,
+    #    93,
+    #    77,
+    #    90,
+    #    6,
+    #    2,
+    #    81,
+    #    86,
+    #    18,
+    #    97,
+    #    13,
+    #    10,
+    #    21,
+    #    94,
+    #    79,
+    #    89,
+    #    5,
+    #]
+    #items.sort()
+
+    #print(items)
     main()
