@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-Equiv="Cache-Control" Content="no-cache" />
+    <meta http-Equiv="Pragma" Content="no-cache" />
+    <meta http-Equiv="Expires" Content="0" />
+    
+    <title>Best Clips of 2024</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            /* shounic color :3 */
+            --color-bg: #304654;
+            --color-light-bg: rgb(54, 79, 94);
+            --color-dark-bg: #222d34;
+
+            --color-menu-button-hover: #395a6e;
+            --color-button-outline: #222d34;
+            --color-standard-button: #7494ae;
+            --color-standard-button-selected: #d0dce6;
+
+
+            --color-link-hover: #19a8f6;
+            --color-link-active: #19a8f6;
+            --color-link-resting: #19a8f6;
+            --color-link-visited: #ff8e2a;
+
+
+            --color-text: #e9f1f5;
+            --color-text-faded: #e9f1f5a6;
+            --color-text-footer: #e9f1f575;
+            --color-header: #e9f1f5;
+
+            --color-dark-text: #222d34;
+
+            /* 'Afacad Flux' */
+
+            --min-double-wide-width: 500px;
+
+            --font: Arial;
+        }
+
+        a { color: var(--color-link-resting); }
+        a:focus { color: var(--color-link-resting); }
+        a:hover { color: var(--color-link-resting); }
+        a:active { color: var(--color-link-resting); }
+        a:visited  { color: var(--color-link-visited); }
+
+        html {
+            margin: 0;
+            border: none;
+            height: 100%;
+            flex: 1;
+        }
+
+        body {
+            display: grid;
+            grid-template-columns: 1fr minmax(max-content, 800px) 1fr;
+            grid-template-rows: 1fr 400px 200px 1fr;
+            grid-template-areas: 
+                '. . .'
+                '. t .'
+                '. b .'
+                '. . .';
+
+            background-color: var(--color-bg); 
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            border: none;
+        }
+
+        p {
+            padding: 0;
+            margin: 0;
+            color: var(--color-text);
+            font-family: var(--font);
+            text-align: center;
+        }
+
+
+        .topBox {
+            grid-area: t;
+            display: grid;
+            justify-content: center;
+            align-content: center;
+        }
+
+        .topBox > p {
+            font-size: 30px;
+        }
+
+        .bottomBox {
+            grid-area: b;
+            display: grid;
+            justify-content: center;
+            align-content: center;
+        }
+
+        .bottomBox > p {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topBox">
+        <p>
+            server doing super quick update/recalculations<br>
+            should be back in a second or two<br>
+            refresh the page
+        </p>
+    </div>
+
+    <div class="bottomBox">
+        <p>check the <a href="https://discord.gg/HaYBByX9KM">discord</a> if this has been up for too long/info</p>
+    </div>
+
+    <script>
+        function pageLoadStuff() {
+            checkWebsite
+        }
+
+        const checkSiteFunc = setInterval(checkWebsite, 5000);
+
+        function checkWebsite() {
+            location.reload();
+        }
+
+        window.onload = pageLoadStuff();
+    </script>
+</body>
+</html>
